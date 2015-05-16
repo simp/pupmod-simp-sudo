@@ -1,0 +1,25 @@
+<% t_tag_spec = Array.new -%>
+<% if @passwd then
+    t_tag_spec.push('PASSWD')
+else
+    t_tag_spec.push('NOPASSWD')
+end
+
+if @doexec then
+    t_tag_spec.push('EXEC')
+else
+    t_tag_spec.push('NOEXEC')
+end
+
+if ['RedHat','CentOS'].include?(@operatingsystem) then
+  if scope.function_versioncmp([@lsbdistrelease,'5.2']) > 0 then
+    if @setenv then
+      t_tag_spec.push('SETENV')
+    else
+      t_tag_spec.push('NOSETENV')
+    end
+  end
+end -%>
+
+<%= Array(@user_list).join(', ') %>    <%= Array(@host_list).join(', ') %>=(<%= Array(@runas).join(', ') %>) <%= t_tag_spec.join(':') %>: <%= Array(@cmnd).join(', ') %>
+

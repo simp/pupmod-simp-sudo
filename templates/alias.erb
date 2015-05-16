@@ -1,0 +1,6 @@
+<% if !@comment.eql?('nil') then -%>
+#<%= @comment %>
+<% end -%>
+
+<%= @alias_type.capitalize %>_Alias <%= @name.upcase %> = <%= Array(@content).join(', ') %>
+
