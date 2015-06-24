@@ -1,8 +1,9 @@
 ---
 fixtures:
+  repositories:
+    common: "git://github.com/simp/pupmod-simp-common"
+    concat: "git://github.com/simp/pupmod-simp-concat"
+    rsync: "git://github.com/simp/pupmod-simp-rsync"
+    stdlib: "git://github.com/simp/puppetlabs-stdlib"
   symlinks:
     sudo: "#{source_dir}"
-    common: "#{source_dir}/../common"
-    concat: "#{source_dir}/../concat"
-    rsync: "#{source_dir}/../rsync"
-    stdlib: "#{source_dir}/../stdlib"
