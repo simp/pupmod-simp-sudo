@@ -1,7 +1,7 @@
 Summary: Sudo Puppet Module
 Name: pupmod-sudo
 Version: 4.1.0
-Release: 1
+Release: 2
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -56,6 +56,10 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Thu Sep 03 2015 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-2
+- Removed use of lsb facts.  Updated travis framework to match
+  skeleton.
+
 * Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-1
 - Changed puppet-server requirement to puppet
 
