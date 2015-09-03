@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ae8d1ca_6299326e",
+        "filename": "templates/uspec.erb",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-09-03T18:11:20Z",
+      "side": 1,
+      "message": "Input to a function must be an array.",
+      "revId": "f70fa0e7270fb852e1183d2c0fe46ffaf5927ccc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
