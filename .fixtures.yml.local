@@ -3,6 +3,7 @@ fixtures:
   symlinks:
     sudo: "#{source_dir}"
     common: "#{source_dir}/../common"
-    concat: "#{source_dir}/../concat"
+    simplib: "#{source_dir}/../simplib"
+    simpcat: "#{source_dir}/../simpcat"
     rsync: "#{source_dir}/../rsync"
     stdlib: "#{source_dir}/../stdlib"
