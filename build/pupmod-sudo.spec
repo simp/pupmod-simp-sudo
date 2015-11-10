@@ -1,13 +1,14 @@
 Summary: Sudo Puppet Module
 Name: pupmod-sudo
 Version: 4.1.0
-Release: 2
+Release: 3
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires: pupmod-common >= 4.2.0-0
-Requires: pupmod-concat >= 2.0.0-0
+Requires: pupmod-simplib >= 1.0.0-0
+Requires: pupmod-simpcat >= 2.0.0-0
 Requires: puppet >= 3.3.0
 Requires: puppetlabs-stdlib >= 4.1.0-0.SIMP
 Buildarch: noarch
@@ -56,6 +57,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Mon Nov 09 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.0-3
+- migration to simplib and simpcat (lib/ only)
+
 * Thu Sep 03 2015 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-2
 - Removed use of lsb facts.  Updated travis framework to match
   skeleton.
