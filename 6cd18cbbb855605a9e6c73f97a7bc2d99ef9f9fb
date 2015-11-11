@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_7e79b392",
+        "filename": "metadata.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2015-11-11T15:40:37Z",
+      "side": 1,
+      "message": "close quote",
+      "revId": "6cd18cbbb855605a9e6c73f97a7bc2d99ef9f9fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
