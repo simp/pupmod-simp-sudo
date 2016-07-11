@@ -1,0 +1,4 @@
+Requires: pupmod-simplib >= 1.0.0-0
+Requires: pupmod-simpcat >= 2.0.0-0
+Requires: puppetlabs-stdlib >= 4.1.0-0.SIMP
+Obsoletes: pupmod-sudo-test >= 0.0.1
