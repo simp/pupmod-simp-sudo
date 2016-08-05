@@ -1,6 +1,6 @@
 {
   "name":    "simp-sudo",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "author":  "simp",
   "summary": "Manage sudo",
   "license": "Apache-2.0",

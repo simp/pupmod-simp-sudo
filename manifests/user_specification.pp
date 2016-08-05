@@ -9,6 +9,7 @@
 #
 # [*user_list*]
 #   Array of users or groups that should be able to execute a command.
+#   Groups must be preceded by %.
 #
 # [*cmnd*]
 #   Should be an array of commands you wan to run.
@@ -32,10 +33,10 @@
 # == Example
 #
 # To create the following in /etc/sudoers:
-#    simp    user2-dev1=(root) PASSWD:EXEC:SETENV: /bin/su root, /bin/su - root
+#    simp, %simp_group    user2-dev1=(root) PASSWD:EXEC:SETENV: /bin/su root, /bin/su - root
 # Use the user_specification definition:
 #     sudo::user_specification { 'default_simp':
-#       user_list => 'simp',
+#       user_list => 'simp, %simp_group',
 #       runas => 'root',
 #       cmnd => [ '/bin/su root', '/bin/su - root' ]
 #     }
