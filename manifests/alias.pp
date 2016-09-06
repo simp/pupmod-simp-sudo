@@ -10,7 +10,7 @@
 #  For example: 'administrators', 'wheel'
 #
 # [*alias_type*]
-#  The type of alias to creat.  One of 'user', 'runas', 'host' or 'cmnd'
+#  The type of alias to create.  One of 'user', 'runas', 'host' or 'cmnd'
 #
 # [*comment*]
 #  Textual comment for this entry
