@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_2dd2dad1",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1005361
+      },
+      "writtenOn": "2016-09-27T13:03:41Z",
+      "side": 1,
+      "message": "broken link",
+      "range": {
+        "startLine": 13,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "e2fe389219adf8ec274ae588d56a48aa7892eb7b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_4dcd1e2f",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1005361
+      },
+      "writtenOn": "2016-09-27T13:03:41Z",
+      "side": 1,
+      "message": "can you explain that this a group?",
+      "range": {
+        "startLine": 50,
+        "startChar": 34,
+        "endLine": 50,
+        "endChar": 45
+      },
+      "revId": "e2fe389219adf8ec274ae588d56a48aa7892eb7b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
