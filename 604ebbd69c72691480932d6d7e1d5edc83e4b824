@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_65a6b210",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2016-09-29T04:15:26Z",
+      "side": 1,
+      "message": "Why no level 3 links like in the Setup section?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 26
+      },
+      "revId": "604ebbd69c72691480932d6d7e1d5edc83e4b824",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_05b6c63d",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2016-09-29T04:15:26Z",
+      "side": 1,
+      "message": "I like these examples a lot.",
+      "revId": "604ebbd69c72691480932d6d7e1d5edc83e4b824",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_45b04e43",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2016-09-29T04:15:26Z",
+      "side": 1,
+      "message": "The symbol would read more clearly in quotes.",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 49,
+        "endChar": 9
+      },
+      "revId": "604ebbd69c72691480932d6d7e1d5edc83e4b824",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_25ad4ae9",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2016-09-29T04:15:26Z",
+      "side": 1,
+      "message": "Was this supposed to be a list of links?",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 41
+      },
+      "revId": "604ebbd69c72691480932d6d7e1d5edc83e4b824",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_e5b2c248",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2016-09-29T04:15:26Z",
+      "side": 1,
+      "message": "Following on from the ssh review, this level of documentation for each parameter is overwhelming in a project README, and isn\u0027t likely to stay in sync with the source code comments (where `puppet strings` will find it).\n\nDo we really need to maintain the same information by hand in several places?",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 51
+      },
+      "revId": "604ebbd69c72691480932d6d7e1d5edc83e4b824",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
