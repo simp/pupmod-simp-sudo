@@ -1,3 +1,7 @@
+* Fri Sep 30 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.0-0
+- Updated to use the version of 'simpcat' that does not conflict with
+  'puppetlabs/concat'.
+
 * Fri Aug 05 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.2-0
 - Updated the user_specification docs and spec.
 

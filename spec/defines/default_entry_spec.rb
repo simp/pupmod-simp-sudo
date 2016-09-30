@@ -9,7 +9,7 @@ describe 'sudo::default_entry' do
   it { should compile.with_all_deps }
 
   it do
-    should create_concat_fragment('sudoers+default_entry_spec.default') \
+    should create_simpcat_fragment('sudoers+default_entry_spec.default') \
       .with_content(/first.*second/)
   end
 end

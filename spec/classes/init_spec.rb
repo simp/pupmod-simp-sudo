@@ -11,7 +11,7 @@ describe 'sudo' do
       it { should create_class('sudo') }
     
       it do
-        should contain_concat_build('sudoers').with({
+        should contain_simpcat_build('sudoers').with({
           'order' => ['remote_sudoers', '*.alias', '*.default', '*.uspec'],
           'target' => '/etc/sudoers',
           #'onlyif' => Output of concat build
@@ -26,7 +26,7 @@ describe 'sudo' do
           'mode' => '0440',
           'backup' => false,
           'audit' => 'content',
-          'subscribe' => 'Concat_build[sudoers]',
+          'subscribe' => 'Simpcat_build[sudoers]',
           'require' => 'Package[sudo]'
         })
       end
