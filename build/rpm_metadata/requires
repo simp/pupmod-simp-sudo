@@ -1,2 +1,2 @@
-Requires: pupmod-simp-simpcat >= 2.0.0-0
+Requires: pupmod-simp-simpcat >= 6.0.0-0
 Obsoletes: pupmod-sudo-test >= 0.0.1

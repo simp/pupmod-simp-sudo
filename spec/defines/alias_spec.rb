@@ -14,7 +14,7 @@ describe 'sudo::alias' do
   it { should compile.with_all_deps }
 
   it {
-    should contain_concat_fragment('sudoers+user_user_alias_11.alias').with_content(
+    should contain_simpcat_fragment('sudoers+user_user_alias_11.alias').with_content(
       /.*generic comment(\s*|.*)User_Alias(\s*|.*)USER_ALIAS(\s*|.*)millert, mikef.*/
     )
   }

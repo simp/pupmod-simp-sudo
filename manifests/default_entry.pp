@@ -56,7 +56,7 @@ define sudo::default_entry (
 ) {
   include 'sudo'
 
-  concat_fragment { "sudoers+$name.default":
+  simpcat_fragment { "sudoers+$name.default":
     content => template('sudo/defaults.erb')
   }
 

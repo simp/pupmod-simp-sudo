@@ -41,7 +41,7 @@ define sudo::alias (
 ) {
   include 'sudo'
 
-  concat_fragment { "sudoers+${alias_type}_${name}_${order}.alias":
+  simpcat_fragment { "sudoers+${alias_type}_${name}_${order}.alias":
     content => template('sudo/alias.erb')
   }
 
