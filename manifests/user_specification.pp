@@ -56,7 +56,7 @@ define sudo::user_specification (
 ) {
   include 'sudo'
 
-  concat_fragment { "sudoers+$name.uspec":
+  simpcat_fragment { "sudoers+$name.uspec":
     content => template('sudo/uspec.erb')
   }
 

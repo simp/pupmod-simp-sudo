@@ -11,9 +11,9 @@
 #
 class sudo {
   # This builds a local 'new' sudoers file.
-  $outfile = concat_output('sudoers')
+  $outfile = simpcat_output('sudoers')
 
-  concat_build { 'sudoers':
+  simpcat_build { 'sudoers':
     order  => ['remote_sudoers', '*.alias', '*.default', '*.uspec'],
     target => '/etc/sudoers',
     onlyif => "/usr/sbin/visudo -q -c -f ${outfile}"
@@ -26,7 +26,7 @@ class sudo {
     mode      => '0440',
     backup    => false,
     audit     => content,
-    subscribe => Concat_build['sudoers'],
+    subscribe => Simpcat_build['sudoers'],
     require   => Package['sudo']
   }
 
