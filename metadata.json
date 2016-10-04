@@ -1,29 +1,28 @@
 {
-  "name":    "simp-sudo",
+  "name": "simp-sudo",
   "version": "4.1.2",
-  "author":  "simp",
+  "author": "simp",
   "summary": "Manage sudo",
   "license": "Apache-2.0",
-  "source":  "https://github.com/simp/pupmod-simp-sudo",
+  "source": "https://github.com/simp/pupmod-simp-sudo",
   "project_page": "https://github.com/simp/pupmod-simp-sudo",
-  "issues_url":   "https://simp-project.atlassian.net",
-  "tags": [ "simp", "sudo" ],
+  "issues_url": "https://simp-project.atlassian.net",
+  "tags": [
+    "simp",
+    "sudo"
+  ],
   "dependencies": [
     {
       "name": "simp/simplib",
-      "version_requirement": ">= 1.0.0"
+      "version_requirement": ">= 1.3.1 < 2.0.0"
     },
     {
       "name": "simp/simpcat",
-      "version_requirement": ">= 4.0.0"
-    },
-    {
-      "name": "simp/rsync",
-      "version_requirement": ">= 4.2.0"
+      "version_requirement": ">= 5.0.1 < 6.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.1.0"
+      "version_requirement": ">= 4.9.0 < 5.0.0"
     }
   ],
   "operatingsystem_support": [
