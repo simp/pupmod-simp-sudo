@@ -1,12 +1,20 @@
 ---
 fixtures:
   repositories:
-    compliance_markup: "https://github.com/simp/pupmod-simp-compliance_markup"
-    simpcat: "https://github.com/simp/pupmod-simp-simpcat"
-    simplib: "https://github.com/simp/pupmod-simp-simplib"
-    rsync: "https://github.com/simp/pupmod-simp-rsync"
+    compliance_markup:
+      repo: https://github.com/simp/pupmod-simp-compliance_markup
+      branch: 5.X
+    simpcat:
+      repo: https://github.com/simp/pupmod-simp-simpcat
+      branch: 5.X
+    simplib:
+      repo: https://github.com/simp/pupmod-simp-simplib
+      branch: 5.X
+    rsync:
+      repo: https://github.com/simp/pupmod-simp-rsync
+      branch: 5.X
     stdlib:
-      repo: "https://github.com/simp/puppetlabs-stdlib"
-      branch: "simp-master"
+      branch: 5.X
+      repo: https://github.com/simp/puppetlabs-stdlib
   symlinks:
     sudo: "#{source_dir}"
