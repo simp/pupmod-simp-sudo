@@ -5,11 +5,30 @@
 #
 # == Parameters
 #
+# [*sudo_user_specification_hash*]
+#   Default: {}
+#   Type: Hash
+#   A hash of sudo::user_specification resources that can be set in hiera
+#   Example:
+#     ---
+#     sudo::user_specifications:
+#       defaults:
+#         host_list:
+#           - hostname
+#         cmnd: [ /usr/bin/sudosh ]
+#       test:
+#       testhost:
+#         host_list:
+#           - otherhost
+#       '%group':
+#
 # == Authors
 #
 # * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
-class sudo {
+class sudo (
+  Hash $user_specifications = {}
+) {
   # This builds a local 'new' sudoers file.
   $outfile = simpcat_output('sudoers')
 
@@ -33,4 +52,26 @@ class sudo {
   package {
     'sudo': ensure => 'latest'
   }
+
+  if ! empty($user_specifications) {
+    # extract defaults and remove that hash from iteration
+    $defaults  = $user_specifications['defaults']
+    $raw_specs = $user_specifications - 'defaults'
+
+    $raw_specs.each |$name, $options| {
+      if is_hash($options) {
+        $args = $options
+      }
+      else {
+        $args = {}
+      }
+      inspect($args)
+      inspect($user_specifications)
+      sudo::user_specification {
+        default: * => $defaults;
+        $name:   * => $args;
+      }
+    }
+  }
+
 }

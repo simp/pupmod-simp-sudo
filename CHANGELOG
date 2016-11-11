@@ -1,3 +1,6 @@
+* Fri Nov 11 2016 Nick Miller <nick.miller@onyxpoint.com> - 5.0.1-0
+- Added feature to add sudo::user_specification resources from hiera
+
 * Fri Sep 30 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.0-0
 - Updated to use the version of 'simpcat' that does not conflict with
   'puppetlabs/concat'.
