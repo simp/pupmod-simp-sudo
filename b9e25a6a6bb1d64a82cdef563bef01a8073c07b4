@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_7057ce27",
+        "filename": "manifests/init.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1008615
+      },
+      "writtenOn": "2016-11-15T16:37:05Z",
+      "side": 1,
+      "message": "A few things here:\n 1. This sort of logic belongs in a params class\n 2. Can we drop support for some of these top-scope variables and Hiera keys in SIMP 6?",
+      "range": {
+        "startLine": 35,
+        "startChar": 39,
+        "endLine": 35,
+        "endChar": 179
+      },
+      "revId": "b9e25a6a6bb1d64a82cdef563bef01a8073c07b4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_538e147a",
+        "filename": "spec/classes/init_spec.rb",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1008615
+      },
+      "writtenOn": "2016-11-15T16:37:05Z",
+      "side": 1,
+      "message": "Four-digit mode: AWESOME! Need more of this.",
+      "range": {
+        "startLine": 27,
+        "startChar": 26,
+        "endLine": 27,
+        "endChar": 30
+      },
+      "revId": "b9e25a6a6bb1d64a82cdef563bef01a8073c07b4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_13e76c47",
+        "filename": "spec/classes/init_spec.rb",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1008615
+      },
+      "writtenOn": "2016-11-15T16:37:05Z",
+      "side": 1,
+      "message": "It\u0027s a good idea to match at least one keyword with this matcher, otherwise you might catch an unrelated error.",
+      "revId": "b9e25a6a6bb1d64a82cdef563bef01a8073c07b4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
