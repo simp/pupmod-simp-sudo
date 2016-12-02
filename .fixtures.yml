@@ -1,7 +1,6 @@
 ---
 fixtures:
   repositories:
-    rsync: https://github.com/simp/pupmod-simp-rsync
     simpcat: https://github.com/simp/pupmod-simp-simpcat
     simplib: https://github.com/simp/pupmod-simp-simplib
     stdlib:
