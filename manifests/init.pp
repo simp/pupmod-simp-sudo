@@ -1,13 +1,7 @@
-# == Class: sudo
-#
 # Constructs a sudoers file based on configured aliases, defaults, and user
 # specifications.
 #
-# == Parameters
-#
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class sudo {
   # This builds a local 'new' sudoers file.

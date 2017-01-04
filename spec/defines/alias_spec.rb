@@ -9,10 +9,10 @@ describe 'sudo::alias' do
         let(:title) { :user_alias }
 
         let(:params) {{
-          :content => ['millert', 'mikef'],
+          :content    => ['millert', 'mikef'],
           :alias_type => 'user',
-          'comment' => 'generic comment',
-          'order' => '11'
+          'comment'   => 'generic comment',
+          'order'     => 11
         }}
 
         it { should compile.with_all_deps }
