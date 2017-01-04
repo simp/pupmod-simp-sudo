@@ -1,6 +1,6 @@
 # Convenience definition for adding a runas alias.
 #
-# @param name
+# @attr name
 #   Becomes the unique alias name of your alias group
 #
 # @param content

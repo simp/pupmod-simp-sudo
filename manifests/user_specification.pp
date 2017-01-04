@@ -40,7 +40,7 @@
 define sudo::user_specification (
   Array[String]            $user_list,
   Array[String]            $cmnd,
-  Array[Simplib::Hostname] $host_list = [$::hostname],
+  Array[Simplib::Hostname] $host_list = [$facts['hostname']],
   String                   $runas = 'root',
   Boolean                  $passwd = true,
   Boolean                  $doexec = true,

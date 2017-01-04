@@ -7,7 +7,7 @@
 #
 # @param target
 #   The user, host, etc hash is the target of the content.  Leave
-#   as 'nil' to not specify a target.
+#   as undef to not specify a target.
 #
 # @param def_type
 #   May be one of:

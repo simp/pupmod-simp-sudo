@@ -12,12 +12,10 @@ else
 end
 
 if ['RedHat','CentOS'].include?(@operatingsystem) then
-  if scope.function_versioncmp([@operatingsystemrelease,'5.2']) > 0 then
-    if @setenv then
-      t_tag_spec.push('SETENV')
-    else
-      t_tag_spec.push('NOSETENV')
-    end
+  if @setenv then
+    t_tag_spec.push('SETENV')
+  else
+    t_tag_spec.push('NOSETENV')
   end
 end -%>
 
