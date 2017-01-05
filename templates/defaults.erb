@@ -1,14 +1,16 @@
 <% case @def_type
     when 'host'
-        symbol = '@'
+      symbol = '@'
     when 'user'
-        symbol = ':'
+      symbol = ':'
     when 'runas'
-        symbol = '>'
+      symbol = '>'
+    when 'cmnd'
+      symbol = '!'
     else
-        symbol = ''
+      symbol = ''
     end -%>
-<% if !@target.eql?('nil') then
+<% if @target
     symbol = "#{symbol}#{@target}"
 end -%>
 

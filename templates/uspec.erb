@@ -1,23 +1,21 @@
 <% t_tag_spec = Array.new -%>
-<% if @passwd then
+<% if @passwd
     t_tag_spec.push('PASSWD')
 else
     t_tag_spec.push('NOPASSWD')
 end
 
-if @doexec then
+if @doexec
     t_tag_spec.push('EXEC')
 else
     t_tag_spec.push('NOEXEC')
 end
 
-if ['RedHat','CentOS'].include?(@operatingsystem) then
-  if scope.function_versioncmp([@operatingsystemrelease,'5.2']) > 0 then
-    if @setenv then
-      t_tag_spec.push('SETENV')
-    else
-      t_tag_spec.push('NOSETENV')
-    end
+if ['RedHat','CentOS'].include?(@facts['operatingsystem'])
+  if @setenv
+    t_tag_spec.push('SETENV')
+  else
+    t_tag_spec.push('NOSETENV')
   end
 end -%>
 

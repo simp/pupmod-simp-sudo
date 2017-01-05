@@ -12,9 +12,9 @@ describe 'sudo::alias::runas' do
 
         it do
           should contain_sudo__alias('runas_rspec').with({
-            'content' => ['millert', 'mikef'],
-            'order' => '10',
-            'comment' => 'generic comment',
+            'content'    => ['millert', 'mikef'],
+            'order'      => 14,
+            'comment'    => 'generic comment',
             'alias_type' => 'runas'
           })
         end
