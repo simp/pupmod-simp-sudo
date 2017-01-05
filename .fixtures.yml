@@ -1,7 +1,7 @@
 ---
 fixtures:
   repositories:
-    simpcat: https://github.com/simp/pupmod-simp-simpcat
+    concat: https://github.com/simp/puppetlabs-concat
     simplib: https://github.com/simp/pupmod-simp-simplib
     stdlib: https://github.com/simp/puppetlabs-stdlib
   symlinks:

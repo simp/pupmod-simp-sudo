@@ -12,7 +12,7 @@ describe 'sudo::alias::user' do
         it do
           should contain_sudo__alias('user_rspec').with({
             'content'    => ['millert', 'mikef'],
-            'order'      => 10,
+            'order'      => 16,
             'comment'    => 'generic comment',
             'alias_type' => 'user'
           })
