@@ -26,14 +26,16 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 define sudo::alias (
-  Array[String]    $content,
-  Sudo::AliasType  $alias_type,
-  Optional[String] $comment = undef,
-  Integer          $order   = 10
+  Array[String[1]]    $content,
+  Sudo::AliasType     $alias_type,
+  Optional[String[1]] $comment     = undef,
+  Integer             $order       = 10
 ) {
   include '::sudo'
 
-  simpcat_fragment { "sudoers+${alias_type}_${name}_${order}.alias":
-    content => template('sudo/alias.erb')
+  concat::fragment { "sudo_${alias_type}_alias_${name}":
+    order   => $order,
+    target  => '/etc/sudoers',
+    content => template("${module_name}/alias.erb")
   }
 }

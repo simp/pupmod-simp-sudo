@@ -15,7 +15,7 @@ describe 'sudo::user_specification' do
           }}
 
           it do
-            should contain_simpcat_fragment('sudoers+user_specification_spec.uspec') \
+            should create_concat__fragment("sudo_user_specification_#{title}")
               .with_content("\njoe, jimbob, %foo    foo=(root) PASSWD:EXEC:SETENV: ifconfig\n\n")
           end
         end
@@ -30,7 +30,7 @@ describe 'sudo::user_specification' do
           }}
 
           it do
-            should contain_simpcat_fragment('sudoers+user_specification_spec.uspec') \
+            should create_concat__fragment("sudo_user_specification_#{title}")
               .with_content("\njoe, jimbob, %foo    foo=(root) NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n\n")
           end
         end

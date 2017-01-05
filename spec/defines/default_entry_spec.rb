@@ -13,7 +13,7 @@ describe 'sudo::default_entry' do
 
           it { should compile.with_all_deps }
           it do
-            should create_simpcat_fragment('sudoers+default_entry_spec.default') \
+            should create_concat__fragment("sudo_default_entry_#{title}")
               .with_content("\nDefaults    first, second\n\n")
           end
         end
@@ -24,7 +24,7 @@ describe 'sudo::default_entry' do
 
           it { should compile.with_all_deps }
           it do
-            should create_simpcat_fragment('sudoers+default_entry_spec.default') \
+            should create_concat__fragment("sudo_default_entry_#{title}")
               .with_content("\nDefaults@some_host_target    first, second\n\n")
           end
         end
@@ -34,7 +34,7 @@ describe 'sudo::default_entry' do
 
           it { should compile.with_all_deps }
           it do
-            should create_simpcat_fragment('sudoers+default_entry_spec.default') \
+            should create_concat__fragment("sudo_default_entry_#{title}")
               .with_content("\nDefaults:    first, second\n\n")
           end
         end
@@ -44,7 +44,7 @@ describe 'sudo::default_entry' do
 
           it { should compile.with_all_deps }
           it do
-            should create_simpcat_fragment('sudoers+default_entry_spec.default') \
+            should create_concat__fragment("sudo_default_entry_#{title}")
               .with_content("\nDefaults>    first, second\n\n")
           end
         end

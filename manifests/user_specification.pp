@@ -38,17 +38,19 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 define sudo::user_specification (
-  Array[String]            $user_list,
-  Array[String]            $cmnd,
-  Array[Simplib::Hostname] $host_list = [$facts['hostname']],
-  String                   $runas = 'root',
-  Boolean                  $passwd = true,
-  Boolean                  $doexec = true,
-  Boolean                  $setenv = true
+  Array[String[1]]         $user_list,
+  Array[String[1]]         $cmnd,
+  Array[Simplib::Hostname] $host_list  = [$facts['hostname']],
+  String[1]                $runas      = 'root',
+  Boolean                  $passwd     = true,
+  Boolean                  $doexec     = true,
+  Boolean                  $setenv     = true
 ) {
   include '::sudo'
 
-  simpcat_fragment { "sudoers+${name}.uspec":
-    content => template('sudo/uspec.erb')
+  concat::fragment { "sudo_user_specification_${name}":
+    order   => 90,
+    target  => '/etc/sudoers',
+    content => template("${module_name}/uspec.erb")
   }
 }

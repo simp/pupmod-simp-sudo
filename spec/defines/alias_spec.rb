@@ -16,7 +16,7 @@ describe 'sudo::alias' do
 
           it { should compile.with_all_deps }
           it {
-            should contain_simpcat_fragment('sudoers+user_user_alias1_10.alias').with_content(
+            should contain_concat__fragment("sudo_#{params[:alias_type]}_alias_#{title}").with_content(
               "\nUser_Alias USER_ALIAS1 = millert, mikef\n\n"
             )
           }
@@ -32,7 +32,7 @@ describe 'sudo::alias' do
 
           it { should compile.with_all_deps }
           it {
-            should contain_simpcat_fragment('sudoers+runas_runas_alias7_10.alias').with_content(
+            should contain_concat__fragment("sudo_#{params[:alias_type]}_alias_#{title}").with_content(
               "#generic comment\n\nRunas_Alias RUNAS_ALIAS7 = millert, mikef\n\n"
             )
           }

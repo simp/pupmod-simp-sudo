@@ -17,9 +17,9 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 define sudo::alias::cmnd (
-  Array[String]    $content,
-  Optional[String] $comment = undef,
-  Integer          $order   = 10
+  Array[String[1]]    $content,
+  Optional[String[1]] $comment  = undef,
+  Integer             $order    = 10
 ) {
   sudo::alias { $name:
     content    => $content,
