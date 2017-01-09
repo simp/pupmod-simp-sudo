@@ -19,7 +19,6 @@ describe 'sudo' do
             let(:hieradata) { 'sudo__user_specifications' }
             it { is_expected.to create_sudo__user_specification('simp_sudosh').with({
               :user_list => ['simp'],
-              :host_list => ['foo'],
               :cmnd      => ['/usr/bin/sudosh'],
             })}
             it { is_expected.to create_sudo__user_specification('users_yum_update').with({
@@ -28,7 +27,6 @@ describe 'sudo' do
             })}
             it { is_expected.to create_sudo__user_specification('test_resource').with({
               :user_list => ['%group'],
-              :host_list => ['foo'],
               :cmnd      => ['w'],
               :runas     => 'root',
               :passwd    => true,

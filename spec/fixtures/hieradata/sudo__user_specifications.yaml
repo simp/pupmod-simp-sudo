@@ -1,0 +1,15 @@
+---
+sudo::user_specifications:
+  simp_sudosh:
+    user_list: ['simp']
+    cmnd: ['/usr/bin/sudosh']
+  users_yum_update:
+    user_list:
+      - '%users'
+    cmnd:
+      - 'yum update'
+  test_resource:
+    user_list: ['%group']
+    cmnd: ['w']
+    runas: root
+    passwd: true
