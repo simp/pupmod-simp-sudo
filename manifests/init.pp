@@ -10,7 +10,7 @@ class sudo {
     owner        => 'root',
     group        => 'root',
     mode         => '0440',
-    validate_cmd => '/usr/sbin/visudo -q -c -f',
+    validate_cmd => '/usr/sbin/visudo -q -c',
     require      => Package['sudo']
   }
 }
