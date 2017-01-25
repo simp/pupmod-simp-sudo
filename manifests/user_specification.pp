@@ -31,8 +31,8 @@
 #   Use the user_specification definition:
 #     sudo::user_specification { 'default_simp':
 #       user_list => 'simp, %simp_group',
-#       runas => 'root',
-#       cmnd => [ '/bin/su root', '/bin/su - root' ]
+#       runas     => 'root',
+#       cmnd      => [ '/bin/su root', '/bin/su - root' ]
 #     }
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
@@ -40,11 +40,11 @@
 define sudo::user_specification (
   Array[String[1]]         $user_list,
   Array[String[1]]         $cmnd,
-  Array[Simplib::Hostname] $host_list  = [$facts['hostname']],
-  String[1]                $runas      = 'root',
-  Boolean                  $passwd     = true,
-  Boolean                  $doexec     = true,
-  Boolean                  $setenv     = true
+  Array[Simplib::Hostname] $host_list = [$facts['hostname']],
+  String[1]                $runas     = 'root',
+  Boolean                  $passwd    = true,
+  Boolean                  $doexec    = true,
+  Boolean                  $setenv    = true
 ) {
   include '::sudo'
 
