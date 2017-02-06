@@ -1,4 +1,4 @@
-* Fri Feb 03 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.2-0
+* Fri Feb 03 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.1-0
 - Fixed the validation command on the concat resource to actually validate the
   temp file prior to putting it in place
 
