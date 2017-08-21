@@ -1,6 +1,6 @@
 {
   "name": "simp-sudo",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "author": "SIMP Team",
   "summary": "Manage sudo",
   "license": "Apache-2.0",
@@ -14,7 +14,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 2.2.0 < 3.0.0"
+      "version_requirement": ">= 2.2.0 < 4.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
