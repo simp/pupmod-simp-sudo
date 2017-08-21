@@ -1,7 +1,10 @@
 ---
 fixtures:
   repositories:
-    concat: https://github.com/simp/puppetlabs-concat
+    concat:
+      # master is at 4.0.1, but we are bound to < 4.0.0 in our metadata.json
+      repo: https://github.com/simp/puppetlabs-concat
+      ref: 3.0.0
     simplib: https://github.com/simp/pupmod-simp-simplib
     stdlib: https://github.com/simp/puppetlabs-stdlib
   symlinks:
