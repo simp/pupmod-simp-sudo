@@ -2,9 +2,10 @@
 fixtures:
   repositories:
     concat:
-      # master is at 4.0.1, but we are bound to < 4.0.0 in our metadata.json
+      # master is beyond 4.1.1, but has breaking changes to
+      # how fragments are ordered (MODULES-6625)
       repo: https://github.com/simp/puppetlabs-concat
-      ref: 3.0.0
+      ref: 4.1.1
     simplib: https://github.com/simp/pupmod-simp-simplib
     stdlib: https://github.com/simp/puppetlabs-stdlib
   symlinks:
