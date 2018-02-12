@@ -1,3 +1,6 @@
+* Fri Feb 09 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 5.0.4-0
+- Update upperbound on puppetlabs/concat version to < 5.0.0
+
 * Fri Aug 18 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 5.0.3-0
 - Update concat version in metadata.json
 - Add concat dependency to build/rpm_metadata/requires
