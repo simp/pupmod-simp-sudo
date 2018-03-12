@@ -31,7 +31,6 @@ default_hiera_config =<<-EOM
   :datadir: "stub"
 :hierarchy:
   - "%{custom_hiera}"
-  - "%{spec_title}"
   - "%{module_name}"
   - "default"
 EOM
@@ -153,4 +152,9 @@ Dir.glob("#{RSpec.configuration.module_path}/*").each do |dir|
   rescue
     fail "ERROR: The module '#{dir}' is not installed. Tests cannot continue."
   end
+end
+
+if ENV['PUPPET_DEBUG']
+  Puppet::Util::Log.level = :debug
+  Puppet::Util::Log.newdestination(:console)
 end

@@ -11,7 +11,7 @@ describe 'sudo::alias::cmnd' do
         let(:params) { {:content => ['/usr/sbin/shutdown, /usr/sbin/reboot'], :comment => 'generic comment'} }
 
         it do
-          should contain_sudo__alias('my_alias').with({
+          is_expected.to contain_sudo__alias('my_alias').with({
             'content'    => ['/usr/sbin/shutdown, /usr/sbin/reboot'],
             'order'      => 10,
             'comment'    => 'generic comment',

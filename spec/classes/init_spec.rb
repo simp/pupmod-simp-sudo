@@ -9,9 +9,9 @@ describe 'sudo' do
         end
 
         context 'with default parameters' do
-          it { should create_class('sudo') }
-          it { should contain_package('sudo') }
-          it { should contain_concat('/etc/sudoers') }
+          it { is_expected.to create_class('sudo') }
+          it { is_expected.to contain_package('sudo') }
+          it { is_expected.to contain_concat('/etc/sudoers') }
         end
 
         context 'should create sudo::user_specification resources with an iterator' do
