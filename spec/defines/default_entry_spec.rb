@@ -11,9 +11,9 @@ describe 'sudo::default_entry' do
         context 'default parameters' do
           let(:params) { {:content => ['first', 'second']} }
 
-          it { should compile.with_all_deps }
+          it { is_expected.to compile.with_all_deps }
           it do
-            should create_concat__fragment("sudo_default_entry_#{title}")
+            is_expected.to create_concat__fragment("sudo_default_entry_#{title}")
               .with_content("\nDefaults    first, second\n\n")
           end
         end
@@ -22,9 +22,9 @@ describe 'sudo::default_entry' do
           let(:params) { {:content => ['first', 'second'], :def_type => 'host', 
             :target => 'some_host_target'} }
 
-          it { should compile.with_all_deps }
+          it { is_expected.to compile.with_all_deps }
           it do
-            should create_concat__fragment("sudo_default_entry_#{title}")
+            is_expected.to create_concat__fragment("sudo_default_entry_#{title}")
               .with_content("\nDefaults@some_host_target    first, second\n\n")
           end
         end
@@ -32,9 +32,9 @@ describe 'sudo::default_entry' do
         context 'def_type = user' do
           let(:params) { {:content => ['first', 'second'], :def_type => 'user'} }
 
-          it { should compile.with_all_deps }
+          it { is_expected.to compile.with_all_deps }
           it do
-            should create_concat__fragment("sudo_default_entry_#{title}")
+            is_expected.to create_concat__fragment("sudo_default_entry_#{title}")
               .with_content("\nDefaults:    first, second\n\n")
           end
         end
@@ -42,9 +42,9 @@ describe 'sudo::default_entry' do
         context 'def_type = runas' do
           let(:params) { {:content => ['first', 'second'], :def_type => 'runas'} }
 
-          it { should compile.with_all_deps }
+          it { is_expected.to compile.with_all_deps }
           it do
-            should create_concat__fragment("sudo_default_entry_#{title}")
+            is_expected.to create_concat__fragment("sudo_default_entry_#{title}")
               .with_content("\nDefaults>    first, second\n\n")
           end
         end
