@@ -16,7 +16,7 @@ describe 'sudo::user_specification' do
 
           it do
             is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
-              .with_content("\njoe, jimbob, %foo    foo=(root) PASSWD:EXEC:SETENV: ifconfig\n\n")
+              .with_content("\njoe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root) PASSWD:EXEC:SETENV: ifconfig\n\n")
           end
         end
 
@@ -31,7 +31,7 @@ describe 'sudo::user_specification' do
 
           it do
             is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
-              .with_content("\njoe, jimbob, %foo    foo=(root) NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n\n")
+              .with_content("\njoe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root) NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n\n")
           end
         end
       end
