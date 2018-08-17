@@ -34,6 +34,18 @@ describe 'sudo::user_specification' do
               .with_content("\njoe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root) NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n\n")
           end
         end
+
+        context 'with an empty host list' do
+          let(:params) {{
+            :user_list => ['joe','jimbob','%foo'],
+            :cmnd      => ['ifconfig', 'tcpdump'],
+            :hostlist  => []
+          }}
+
+          it do
+            is_expected.to raise_error(Puppet::Error)
+          end
+        end
       end
     end
   end
