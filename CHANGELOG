@@ -1,4 +1,4 @@
-* Fri Aug 20 2018 Jeanne Greulich jeanne.greulich@onyxpoint.com> - 5.0.6-0
+* Fri Aug 20 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 5.0.6-0
 - Added minmim size for hostlist so blank list was not accepted.
 
 * Wed Jun 20 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.5-0
