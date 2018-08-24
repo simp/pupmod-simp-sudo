@@ -6,9 +6,9 @@
 #   Example:
 #     ---
 #     sudo::user_specifications:
-#       simp_sudosh:
+#       simp_su:_
 #         user_list: ['simp']
-#         cmnd: ['/usr/bin/sudosh']
+#         cmnd: ['/bin/su']
 #       users_yum_update:
 #         user_list:
 #           - '%users'

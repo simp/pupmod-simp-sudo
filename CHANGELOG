@@ -1,3 +1,7 @@
+* Fri Aug 24 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.7-0
+- Replaced all references to 'sudosh' with 'su' to reduce future confusion as
+  we move away from using sudosh.
+
 * Fri Aug 17 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 5.0.6-0
 - Added minimum size for sudo::user_specification::hostlist, because an
   empty list is not permitted.
