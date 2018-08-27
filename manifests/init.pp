@@ -6,7 +6,7 @@
 #   Example:
 #     ---
 #     sudo::user_specifications:
-#       simp_su:_
+#       simp_su:
 #         user_list: ['simp']
 #         cmnd: ['/bin/su']
 #       users_yum_update:
