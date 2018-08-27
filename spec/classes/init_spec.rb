@@ -17,9 +17,9 @@ describe 'sudo' do
         context 'should create sudo::user_specification resources with an iterator' do
           context 'with properly formatted and complete yaml' do
             let(:hieradata) { 'sudo__user_specifications' }
-            it { is_expected.to create_sudo__user_specification('simp_sudosh').with({
+            it { is_expected.to create_sudo__user_specification('simp_su').with({
               :user_list => ['simp'],
-              :cmnd      => ['/usr/bin/sudosh'],
+              :cmnd      => ['/bin/su'],
             })}
             it { is_expected.to create_sudo__user_specification('users_yum_update').with({
               :user_list => ['%users'],

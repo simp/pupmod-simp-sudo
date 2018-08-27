@@ -1,6 +1,6 @@
 {
   "name": "simp-sudo",
-  "version": "5.0.6",
+  "version": "5.0.7",
   "author": "SIMP Team",
   "summary": "Manage sudo",
   "license": "Apache-2.0",
