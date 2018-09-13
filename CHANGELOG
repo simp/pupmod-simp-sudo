@@ -1,4 +1,4 @@
-* Thu Sep 13 2017 Nicholas Markowski <nicholas.markowski@onyxpoint.com> - 5.0.7-0
+* Thu Sep 13 2018 Nicholas Markowski <nicholas.markowski@onyxpoint.com> - 5.0.7-0
 - Added support for Puppet 5 and OEL
 - Modified uspec template to handle the RedHat OS family instead of just RHEL
   or CentOS
