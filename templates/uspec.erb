@@ -11,7 +11,7 @@ else
     t_tag_spec.push('NOEXEC')
 end
 
-if ['RedHat'].include?(@facts['osfamily'])
+if ['RedHat','CentOS','OracleLinux'].include?(@facts['operatingsystem'])
   if @setenv
     t_tag_spec.push('SETENV')
   else
