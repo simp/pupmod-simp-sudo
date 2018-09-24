@@ -171,7 +171,8 @@ pup5_5-validation:
   <<: *cache_bundler
   <<: *setup_bundler_env
   <<: *validation_checks
- pup5_5-unit:
+
+pup5_5-unit:
   stage: unit
   tags:
     - docker
@@ -184,7 +185,7 @@ pup5_5-validation:
 
 # Keep an eye on the latest puppet 5
 # ----------------------------------
-pup5.latest-validation:
+pup5_latest-validation:
   stage: validation
   tags:
     - docker
@@ -194,9 +195,8 @@ pup5.latest-validation:
   <<: *cache_bundler
   <<: *setup_bundler_env
   <<: *validation_checks
-  allow_failure: true
 
-pup5.latest-unit:
+pup5_latest-unit:
   stage: unit
   tags:
     - docker
@@ -206,32 +206,3 @@ pup5.latest-unit:
   <<: *cache_bundler
   <<: *setup_bundler_env
   <<: *spec_tests
-  allow_failure: true
-
-
-
-# No acceptance tests yet
-# Acceptance tests
-# ==============================================================================
-#acceptance-default:
-#  stage: acceptance
-#  tags:
-#    - beaker
-#  <<: *cache_bundler
-#  <<: *setup_bundler_env
-#  variables:
-#    PUPPET_VERSION: '4.10'
-#  script:
-#    - bundle exec rake beaker:suites[default]
-#
-#acceptance-fips-default:
-#  stage: acceptance
-#  tags:
-#    - beaker
-#  <<: *cache_bundler
-#  <<: *setup_bundler_env
-#  variables:
-#    PUPPET_VERSION: '4.10'
-#    BEAKER_fips: 'yes'
-#  script:
-#    - bundle exec rake beaker:suites[default]
