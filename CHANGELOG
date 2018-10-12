@@ -1,9 +1,14 @@
-* Thu Sep 13 2018 Nicholas Markowski <nicholas.markowski@onyxpoint.com> - 5.0.7-0
+* Fri Oct 12 2018 Nick Miller <nick.miller@onyxpoint.com> - 5.1.0-0
+- Added $package_ensure parameter
+  - Changed the package from 'latest' to 'installed'
+  - It will also respect `simp_options::package_ensure`
+
+* Thu Sep 13 2018 Nicholas Markowski <nicholas.markowski@onyxpoint.com> - 5.1.0-0
 - Added support for Puppet 5 and OEL
 - Modified uspec template to handle the RedHat OS family instead of just RHEL
   or CentOS
 
-* Fri Aug 24 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.7-0
+* Fri Aug 24 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.1.0-0
 - Replaced all references to 'sudosh' with 'su' to reduce future confusion as
   we move away from using sudosh.
 

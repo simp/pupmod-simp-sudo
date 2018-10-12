@@ -20,12 +20,18 @@
 #         runas: root
 #         passwd: true
 #
+# @param package_ensure The ensure status of packages to be managed
+#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class sudo (
-  Optional[Hash] $user_specifications = undef
-){
-  package { 'sudo': ensure => 'latest' }
+  Optional[Hash] $user_specifications = undef,
+  String         $package_ensure      = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+) {
+
+  package { 'sudo':
+    ensure => $package_ensure
+  }
 
   concat { '/etc/sudoers':
     owner        => 'root',
