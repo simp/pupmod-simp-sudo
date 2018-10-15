@@ -22,7 +22,7 @@
 #
 # @param package_ensure The ensure status of packages to be managed
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author https://github.com/simp/pupmod-simp-sudo/graphs/contributors
 #
 class sudo (
   Optional[Hash] $user_specifications = undef,
