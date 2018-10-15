@@ -20,12 +20,18 @@
 #         runas: root
 #         passwd: true
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @param package_ensure The ensure status of packages to be managed
+#
+# @author https://github.com/simp/pupmod-simp-sudo/graphs/contributors
 #
 class sudo (
-  Optional[Hash] $user_specifications = undef
-){
-  package { 'sudo': ensure => 'latest' }
+  Optional[Hash] $user_specifications = undef,
+  String         $package_ensure      = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+) {
+
+  package { 'sudo':
+    ensure => $package_ensure
+  }
 
   concat { '/etc/sudoers':
     owner        => 'root',
