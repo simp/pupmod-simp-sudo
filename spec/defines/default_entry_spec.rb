@@ -29,6 +29,17 @@ describe 'sudo::default_entry' do
           end
         end
 
+        context 'def_type = cmnd and target specified' do
+          let(:params) { {:content => ['first', 'second'], :def_type => 'cmnd',
+              :target => 'some_cmnd_target'} }
+
+          it { is_expected.to compile.with_all_deps }
+          it do
+            is_expected.to create_concat__fragment("sudo_default_entry_#{title}")
+              .with_content("\nDefaults!some_cmnd_target    first, second\n\n")
+          end
+        end
+
         context 'def_type = user' do
           let(:params) { {:content => ['first', 'second'], :def_type => 'user'} }
 
@@ -46,6 +57,16 @@ describe 'sudo::default_entry' do
           it do
             is_expected.to create_concat__fragment("sudo_default_entry_#{title}")
               .with_content("\nDefaults>    first, second\n\n")
+          end
+        end
+
+        context 'def_type = cmnd' do
+          let(:params) { {:content => ['first', 'second'], :def_type => 'cmnd'} }
+
+          it { is_expected.to compile.with_all_deps }
+          it do
+            is_expected.to create_concat__fragment("sudo_default_entry_#{title}")
+              .with_content("\nDefaults!    first, second\n\n")
           end
         end
       end

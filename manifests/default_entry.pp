@@ -12,6 +12,7 @@
 # @param def_type
 #   May be one of:
 #   - base => Global
+#   - cmnd => Cmnd Entry
 #   - host => Host Entry
 #   - user => User Entry
 #   - runas => Runas Entry
