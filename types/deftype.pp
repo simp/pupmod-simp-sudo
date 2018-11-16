@@ -1,1 +1,1 @@
-type Sudo::DefType = Enum['base', 'host', 'user', 'runas']
+type Sudo::DefType = Enum['base', 'cmnd', 'host', 'user', 'runas']

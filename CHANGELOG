@@ -1,3 +1,6 @@
+* Thu Nov 15 2018 Martin Merfort <martin.merfort@sixt.com> - 5.1.1-0
+- Enable support for cmnd def_type
+
 * Fri Oct 12 2018 Nick Miller <nick.miller@onyxpoint.com> - 5.1.0-0
 - Added $package_ensure parameter
   - Changed the package from 'latest' to 'installed'
