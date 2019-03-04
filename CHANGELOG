@@ -1,3 +1,7 @@
+* Mon Mar 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 5.1.2-0
+- Expanded the upper limit of the concat and stdlib Puppet module versions
+- Updated URLs in the README.md
+
 * Thu Nov 15 2018 Martin Merfort <martin.merfort@sixt.com> - 5.1.1-0
 - Enable support for cmnd def_type
 
