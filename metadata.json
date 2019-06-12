@@ -1,6 +1,6 @@
 {
   "name": "simp-sudo",
-  "version": "5.1.3",
+  "version": "5.2.0",
   "author": "SIMP Team",
   "summary": "Manage sudo",
   "license": "Apache-2.0",
@@ -18,7 +18,7 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.13.1 < 6.0.0"
+      "version_requirement": ">= 4.13.1 < 7.0.0"
     },
     {
       "name": "simp/simplib",
@@ -51,7 +51,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.7.0 < 6.0.0"
+      "version_requirement": ">= 5.0.0 < 7.0.0"
     }
   ]
 }
