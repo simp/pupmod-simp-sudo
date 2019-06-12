@@ -17,7 +17,12 @@ if ['RedHat','CentOS','OracleLinux'].include?(@facts['operatingsystem'])
   else
     t_tag_spec.push('NOSETENV')
   end
+end
+
+opts = Array.new
+@options.each do |k,v|
+  opts.push("#{k.upcase}=#{v}")
 end -%>
 
-<%= Array(@user_list).join(', ') %>    <%= Array(@host_list).join(', ') %>=(<%= Array(@runas).join(', ') %>) <%= t_tag_spec.join(':') %>: <%= Array(@cmnd).join(', ') %>
+<%= Array(@user_list).join(', ') %>    <%= Array(@host_list).join(', ') %>=(<%= Array(@runas).join(', ') %>) <%= opts.join(" ") %> <%= t_tag_spec.join(':') %>: <%= Array(@cmnd).join(', ') %>
 
