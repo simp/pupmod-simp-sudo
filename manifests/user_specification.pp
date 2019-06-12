@@ -26,6 +26,9 @@
 # @param setenv
 #   Set SETENV in /etc/sudoers
 #
+# @param options
+#   Set additional options (such as SELinux role or type, date restrictions, or timeout)
+#
 # @example To create the following in /etc/sudoers:
 #   `simp, %simp_group    user2-dev1=(root) PASSWD:EXEC:SETENV: /bin/su root, /bin/su - root`
 #   Use the user_specification definition:
@@ -44,7 +47,8 @@ define sudo::user_specification (
   String[1]                $runas     = 'root',
   Boolean                  $passwd    = true,
   Boolean                  $doexec    = true,
-  Boolean                  $setenv    = true
+  Boolean                  $setenv    = true,
+  Hash                     $options   = {},
 ) {
   include '::sudo'
 

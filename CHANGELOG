@@ -1,3 +1,9 @@
+* Wed Jun 12 2019 Steven Pritchard <steven.pritchard@onyxpoint.com> - 5.2.0-0
+- Allow additional options in sudo::user_specification
+- Add Puppet 6 support
+- Remove Puppet 4 support
+- Allow puppetlabs/stdlib < 7
+
 * Mon Mar 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 5.1.2-0
 - Expanded the upper limit of the concat and stdlib Puppet module versions
 - Updated URLs in the README.md
