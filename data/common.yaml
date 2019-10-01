@@ -1,0 +1,5 @@
+---
+lookup_options:
+  'sudo::user_specifications':
+    merge:
+      strategy: deep

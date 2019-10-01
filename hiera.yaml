@@ -1,0 +1,6 @@
+---
+version: 5
+
+hierarchy:
+  - name: 'Common'
+    path: 'common.yaml'

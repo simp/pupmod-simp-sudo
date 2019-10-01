@@ -1,3 +1,7 @@
+* Wed Sep 25 2019 Steven Pritchard <steven.pritchard@onyxpoint.com> - 5.2.1-0
+- Deep merge user_specifications by default
+- Add support for simp/simplib < 7
+
 * Fri Aug 02 2019 Robert Vincent <pillarsdotnet@gmail.com> - 5.2.1-0
 - Support puppetlabs/concat 6.x.
 
