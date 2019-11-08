@@ -37,6 +37,33 @@ describe 'sudo::alias' do
             )
           }
         end
+
+        context 'test cve_2019_14287 mitigaction' do
+          let(:title) { 'runas_All' }
+          let(:params) {{
+            :content    => ['ALL', '!mikef'],
+            :alias_type => 'runas',
+            :comment    => 'generic comment'
+          }}
+          context 'with version < 1.8.28 and ALL included in content' do
+            let(:facts) { os_facts.merge( { :sudo_version => '1.8.18' })}
+
+            it {
+              is_expected.to contain_concat__fragment("sudo_#{params[:alias_type]}_alias_#{title}").with_content(
+                "#generic comment\n\nRunas_Alias RUNAS_ALL = ALL, !mikef, !#-1\n\n"
+              )
+            }
+          end
+          context 'with version >= 1.8.28 and ALL included in content' do
+            let(:facts) { os_facts.merge( { :sudo_version => '1.8.28' })}
+
+            it {
+              is_expected.to contain_concat__fragment("sudo_#{params[:alias_type]}_alias_#{title}").with_content(
+                "#generic comment\n\nRunas_Alias RUNAS_ALL = ALL, !mikef\n\n"
+              )
+            }
+          end
+        end
       end
     end
   end

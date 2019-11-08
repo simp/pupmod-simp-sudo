@@ -47,7 +47,14 @@ define sudo::default_entry (
   Optional[String[1]] $target   = undef,
   Sudo::DefType       $def_type = 'base'
 ) {
-  include '::sudo'
+  include 'sudo'
+
+  #  Check if this version is susceptable to cve_2019_14287
+  if ( $def_type != 'runas' ) or ( $facts['sudo_version'] and ( versioncmp($facts['sudo_version'], '1.8.28' )  >= 0 )) {
+    $_content = $content
+  } else {
+    $_content = sudo::update_runas_list($content)
+  }
 
   concat::fragment { "sudo_default_entry_${name}":
     order   => 80,

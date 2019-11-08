@@ -1,3 +1,11 @@
+* Mon Nov 11 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 5.2.1-0
+- CVE-2019-14287 mitigation. See
+  https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-14287
+  for more information
+- Do not allow the use of userid or group id of -1 when ALL or %ALL are
+  used in the runas section of a sudo user specification and the version of
+  sudo is earlier than 1.8.28.
+
 * Wed Sep 25 2019 Steven Pritchard <steven.pritchard@onyxpoint.com> - 5.2.1-0
 - Deep merge user_specifications by default
 - Add support for simp/simplib < 7
