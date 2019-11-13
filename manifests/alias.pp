@@ -33,6 +33,13 @@ define sudo::alias (
 ) {
   include '::sudo'
 
+  #  Check if this version is susceptable to cve_2019_14287
+  if ($alias_type != 'runas' ) or ( $facts['sudo_version'] and versioncmp($facts['sudo_version'], '1.8.28' ) >= 0 ) {
+    $_content = $content
+  } else {
+    $_content = sudo::update_runas_list($content)
+  }
+
   concat::fragment { "sudo_${alias_type}_alias_${name}":
     order   => $order,
     target  => '/etc/sudoers',

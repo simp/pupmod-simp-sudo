@@ -41,16 +41,23 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 define sudo::user_specification (
-  Array[String[1]]         $user_list,
-  Array[String[1]]         $cmnd,
-  Array[Simplib::Hostname,1] $host_list = [$facts['hostname'], $facts['fqdn']],
-  String[1]                $runas     = 'root',
-  Boolean                  $passwd    = true,
-  Boolean                  $doexec    = true,
-  Boolean                  $setenv    = true,
-  Hash                     $options   = {},
+  Array[String[1]]                    $user_list,
+  Array[String[1]]                    $cmnd,
+  Array[Simplib::Hostname,1]          $host_list  = [$facts['hostname'], $facts['fqdn']],
+  Variant[String[1],Array[String[1]]] $runas      = ['root'],
+  Boolean                             $passwd     = true,
+  Boolean                             $doexec     = true,
+  Boolean                             $setenv     = true,
+  Hash                                $options    = {},
 ) {
-  include '::sudo'
+  include 'sudo'
+
+  #  Check if this version is susceptable to cve_2019_14287
+  if $facts['sudo_version'] and ( versioncmp($facts['sudo_version'], '1.8.28')  >= 0 ) {
+    $_runas = $runas
+  } else {
+    $_runas =  sudo::update_runas_list($runas)
+  }
 
   concat::fragment { "sudo_user_specification_${name}":
     order   => 90,

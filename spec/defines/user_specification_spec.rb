@@ -62,6 +62,43 @@ describe 'sudo::user_specification' do
               .with_content("\njoe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root) ROLE=unconfined_r NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n\n")
           end
         end
+        #test for cve_2019-14287 mitigation
+        context 'with  sudo version <  1.8.28' do
+          let(:facts) { 
+            os_facts.merge({
+              'sudo_version' => '1.8.10'
+          })}
+          let(:params) {{
+            :user_list => ['joe'],
+            :cmnd      => ['cat'],
+            :runas     => 'ALL',
+            :passwd    => false,
+            :doexec    => false,
+            :setenv    => false,
+          }}
+          it do
+            is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
+              .with_content("\njoe    #{facts[:hostname]}, #{facts[:fqdn]}=(ALL, !#-1)  NOPASSWD:NOEXEC:NOSETENV: cat\n\n")
+          end
+        end
+        context 'with  sudo version >  1.8.28' do
+          let(:facts) { 
+            os_facts.merge({
+              'sudo_version' => '1.8.30'
+          })}
+          let(:params) {{
+            :user_list => ['joe'],
+            :cmnd      => ['cat'],
+            :runas     => 'ALL',
+            :passwd    => false,
+            :doexec    => false,
+            :setenv    => false,
+          }}
+          it do
+            is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
+              .with_content("\njoe    #{facts[:hostname]}, #{facts[:fqdn]}=(ALL)  NOPASSWD:NOEXEC:NOSETENV: cat\n\n")
+          end
+        end
       end
     end
   end

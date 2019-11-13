@@ -69,6 +69,25 @@ describe 'sudo::default_entry' do
               .with_content("\nDefaults!    first, second\n\n")
           end
         end
+        # Test cve 2019-14287 mitigation
+        context 'test cve mitigation ' do
+          let(:params) { {:content => ['%ALL', '!%wheel'], :def_type => 'runas'} }
+
+          context 'sudo version < 1.8.28' do
+            let(:facts) { os_facts.merge( { :sudo_version => '1.8.0' })}
+             it do
+               is_expected.to create_concat__fragment("sudo_default_entry_#{title}")
+                 .with_content("\nDefaults>    %ALL, !%wheel, !%#-1\n\n")
+             end
+          end
+          context 'sudo version >= 1.8.28' do
+            let(:facts) { os_facts.merge( { :sudo_version => '1.8.30' })}
+             it do
+               is_expected.to create_concat__fragment("sudo_default_entry_#{title}")
+                 .with_content("\nDefaults>    %ALL, !%wheel\n\n")
+             end
+          end
+        end
       end
     end
   end
