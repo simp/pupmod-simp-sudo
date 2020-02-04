@@ -1,3 +1,6 @@
+* Tue Feb 04 2020 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 5.2.1-0
+- Update for EL8.
+
 * Mon Nov 11 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 5.2.1-0
 - CVE-2019-14287 mitigation. See
   https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-14287
