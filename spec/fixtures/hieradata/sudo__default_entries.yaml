@@ -1,0 +1,11 @@
+---
+sudo::default_entries:
+  '00_main':
+    content:
+      - requiretty
+      - syslog=authpriv
+  'host_override':
+    content:
+      - passwd_timeout=0.017
+    target: SERVERS
+    def_type: host

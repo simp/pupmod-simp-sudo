@@ -2,7 +2,10 @@
 .yardoc
 dist/
 pkg/
-spec/fixtures/
+spec/fixtures/hieradata/*
+!spec/fixtures/hieradata/sudo__*.yaml
+spec/fixtures/modules/
+spec/fixtures/simp_rspec/
 spec/rp_env/
 !/spec/hieradata/default.yaml
 !/spec/fixtures/site.pp

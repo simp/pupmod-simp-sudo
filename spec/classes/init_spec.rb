@@ -34,6 +34,36 @@ describe 'sudo' do
           end
         end
 
+        context 'should create sudo::default_entry resources with an iterator' do
+          context 'with properly formatted and complete yaml' do
+            let(:hieradata) { 'sudo__default_entries' }
+            it { is_expected.to create_sudo__default_entry('00_main').with({
+              :content  => ['requiretty','syslog=authpriv'],
+              :def_type => 'base',
+            })}
+            it { is_expected.to create_sudo__default_entry('host_override').with({
+              :content  => ['passwd_timeout=0.017'],
+              :target   => 'SERVERS',
+              :def_type => 'host',
+            })}
+          end
+        end
+
+        context 'should create sudo::alias resources with an iterator' do
+          context 'with properly formatted and complete yaml' do
+            let(:hieradata) { 'sudo__aliases' }
+            it { is_expected.to create_sudo__alias('user_alias').with({
+              :content    => ['user1','user2'],
+              :alias_type => 'user',
+              :order      => 99,
+            })}
+            it { is_expected.to create_sudo__alias('host_alias').with({
+              :content    => ['host1','host2'],
+              :alias_type => 'host',
+              :order      => 10, # default
+            })}
+          end
+        end
       end
     end
   end

@@ -1,0 +1,13 @@
+---
+sudo::aliases:
+  user_alias:
+    content:
+      - user1
+      - user2
+    alias_type: user
+    order: 99
+  host_alias:
+    content:
+      - host1
+      - host2
+    alias_type: host
