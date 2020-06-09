@@ -3,3 +3,9 @@ lookup_options:
   'sudo::user_specifications':
     merge:
       strategy: deep
+  'sudo::default_entries':
+    merge:
+      strategy: deep
+  'sudo::aliases':
+    merge:
+      strategy: deep

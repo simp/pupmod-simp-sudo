@@ -25,8 +25,10 @@
 # @author https://github.com/simp/pupmod-simp-sudo/graphs/contributors
 #
 class sudo (
-  Optional[Hash] $user_specifications = undef,
-  String         $package_ensure      = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+  Hash   $user_specifications = {},
+  Hash   $default_entries     = {},
+  Hash   $aliases             = {},
+  String $package_ensure      = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
 ) {
 
   package { 'sudo':
@@ -41,13 +43,21 @@ class sudo (
     require      => Package['sudo']
   }
 
-  if $user_specifications {
-    $user_specifications.each |$spec, $options| {
-      $args = $options ? { Hash => $options, default => {} }
-      sudo::user_specification {
-        $spec: * => $args;
-      }
+  $user_specifications.each |$spec, $options| {
+    sudo::user_specification { $spec:
+      * => $options,
     }
   }
 
+  $default_entries.each |$key, $value| {
+    sudo::default_entry { $key:
+      * => $value,
+    }
+  }
+
+  $aliases.each |$key, $value| {
+    sudo::alias { $key:
+      * => $value,
+    }
+  }
 }
