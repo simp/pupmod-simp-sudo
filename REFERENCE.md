@@ -334,7 +334,7 @@ Note that the 'Tag_Spec' entries have been explicitly noted below.
 `simp, %simp_group    user2-dev1=(root) PASSWD:EXEC:SETENV: /bin/su root, /bin/su - root`
 Use the user_specification definition:
   sudo::user_specification { 'default_simp':
-    user_list => 'simp, %simp_group',
+    user_list => [ 'simp', '%simp_group' ],
     runas     => 'root',
     cmnd      => [ '/bin/su root', '/bin/su - root' ]
   }
