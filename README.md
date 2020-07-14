@@ -54,7 +54,7 @@ Giving a user root permissions
 # %powerusers is the powerusers group
 
 sudo::user_specification { 'power_users':
-  user_list => 'persona, personb, %powerusers',
+  user_list => [ 'persona', 'personb', '%powerusers' ],
   runas     => 'root',
   cmnd      => [ '/bin/su root', '/bin/su - root' ]
 }
@@ -64,7 +64,7 @@ Giving a system user access to a command without root
 
 ```puppet
 sudo::user_specification { 'myapp':
-  user_list => 'myappuser',
+  user_list => [ 'myappuser' ],
   runas     => 'root',
   cmnd      => [ '/usr/bin/someservice' ],
   passwd    => false,
