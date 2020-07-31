@@ -1,5 +1,6 @@
-<% t_tag_spec = Array.new -%>
-<% if @passwd
+<%
+t_tag_spec = Array.new
+if @passwd
     t_tag_spec.push('PASSWD')
 else
     t_tag_spec.push('NOPASSWD')
@@ -23,6 +24,4 @@ opts = Array.new
 @options.each do |k,v|
   opts.push("#{k.upcase}=#{v}")
 end -%>
-
 <%= Array(@user_list).join(', ') %>    <%= Array(@host_list).join(', ') %>=(<%= Array(@_runas).join(', ') %>) <%= opts.join(" ") %> <%= t_tag_spec.join(':') %>: <%= Array(@cmnd).join(', ') %>
-
