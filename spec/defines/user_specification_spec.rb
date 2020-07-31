@@ -16,7 +16,7 @@ describe 'sudo::user_specification' do
 
           it do
             is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
-              .with_content("\njoe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root)  PASSWD:EXEC:SETENV: ifconfig\n\n")
+              .with_content("joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root)  PASSWD:EXEC:SETENV: ifconfig\n")
           end
         end
 
@@ -31,7 +31,7 @@ describe 'sudo::user_specification' do
 
           it do
             is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
-              .with_content("\njoe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root)  NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n\n")
+              .with_content("joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root)  NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n")
           end
         end
 
@@ -59,12 +59,12 @@ describe 'sudo::user_specification' do
 
           it do
             is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
-              .with_content("\njoe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root) ROLE=unconfined_r NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n\n")
+              .with_content("joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root) ROLE=unconfined_r NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n")
           end
         end
         #test for cve_2019-14287 mitigation
         context 'with  sudo version <  1.8.28' do
-          let(:facts) { 
+          let(:facts) {
             os_facts.merge({
               'sudo_version' => '1.8.10'
           })}
@@ -78,11 +78,11 @@ describe 'sudo::user_specification' do
           }}
           it do
             is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
-              .with_content("\njoe    #{facts[:hostname]}, #{facts[:fqdn]}=(ALL, !#-1)  NOPASSWD:NOEXEC:NOSETENV: cat\n\n")
+              .with_content("joe    #{facts[:hostname]}, #{facts[:fqdn]}=(ALL, !#-1)  NOPASSWD:NOEXEC:NOSETENV: cat\n")
           end
         end
         context 'with  sudo version >  1.8.28' do
-          let(:facts) { 
+          let(:facts) {
             os_facts.merge({
               'sudo_version' => '1.8.30'
           })}
@@ -96,7 +96,7 @@ describe 'sudo::user_specification' do
           }}
           it do
             is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
-              .with_content("\njoe    #{facts[:hostname]}, #{facts[:fqdn]}=(ALL)  NOPASSWD:NOEXEC:NOSETENV: cat\n\n")
+              .with_content("joe    #{facts[:hostname]}, #{facts[:fqdn]}=(ALL)  NOPASSWD:NOEXEC:NOSETENV: cat\n")
           end
         end
       end

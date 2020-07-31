@@ -17,7 +17,7 @@ describe 'sudo::alias' do
           it { is_expected.to compile.with_all_deps }
           it {
             is_expected.to contain_concat__fragment("sudo_#{params[:alias_type]}_alias_#{title}").with_content(
-              "\nUser_Alias USER_ALIAS1 = millert, mikef\n\n"
+              "User_Alias USER_ALIAS1 = millert, mikef\n"
             )
           }
         end
@@ -33,7 +33,7 @@ describe 'sudo::alias' do
           it { is_expected.to compile.with_all_deps }
           it {
             is_expected.to contain_concat__fragment("sudo_#{params[:alias_type]}_alias_#{title}").with_content(
-              "#generic comment\n\nRunas_Alias RUNAS_ALIAS7 = millert, mikef\n\n"
+              "#generic comment\nRunas_Alias RUNAS_ALIAS7 = millert, mikef\n"
             )
           }
         end
@@ -50,7 +50,7 @@ describe 'sudo::alias' do
 
             it {
               is_expected.to contain_concat__fragment("sudo_#{params[:alias_type]}_alias_#{title}").with_content(
-                "#generic comment\n\nRunas_Alias RUNAS_ALL = ALL, !mikef, !#-1\n\n"
+                "#generic comment\nRunas_Alias RUNAS_ALL = ALL, !mikef, !#-1\n"
               )
             }
           end
@@ -59,7 +59,7 @@ describe 'sudo::alias' do
 
             it {
               is_expected.to contain_concat__fragment("sudo_#{params[:alias_type]}_alias_#{title}").with_content(
-                "#generic comment\n\nRunas_Alias RUNAS_ALL = ALL, !mikef\n\n"
+                "#generic comment\nRunas_Alias RUNAS_ALL = ALL, !mikef\n"
               )
             }
           end
