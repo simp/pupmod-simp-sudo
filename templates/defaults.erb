@@ -9,10 +9,8 @@
       symbol = '!'
     else
       symbol = ''
-    end -%>
-<% if @target
+    end
+   if @target
     symbol = "#{symbol}#{@target}"
 end -%>
-
 Defaults<%= symbol %>    <%= Array(@_content).join(', ') %>
-

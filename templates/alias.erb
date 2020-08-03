@@ -1,6 +1,4 @@
 <% if @comment -%>
 #<%= @comment %>
 <% end -%>
-
 <%= @alias_type.capitalize %>_Alias <%= @name.upcase %> = <%= Array(@_content).join(', ') %>
-

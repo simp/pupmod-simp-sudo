@@ -1,3 +1,6 @@
+* Tue Jun 09 2020 Arjen Zonneveld <arjenz@users.noreply.github.com> - 5.3.1-0
+- Fixed docs for user_list Array type
+
 * Tue Jun 09 2020 Steven Pritchard <steven.pritchard@onyxpoint.com> - 5.3.0-0
 - Add parameters for sudo::default_entry and sudo::alias defined types
 
