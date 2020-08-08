@@ -8,6 +8,7 @@
 .yardoc
 dist/
 pkg/
+spec/defines/
 spec/fixtures/
 spec/acceptance/
 spec/rp_env/
