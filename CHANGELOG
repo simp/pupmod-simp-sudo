@@ -1,3 +1,6 @@
+* Sat Dec 19 2020 Chris Tessmer <chris.tessmer@onyxpoint.com> - 5.3.2
+- Removed EL6 support
+
 * Tue Jun 09 2020 Arjen Zonneveld <arjenz@users.noreply.github.com> - 5.3.1-0
 - Fixed docs for user_list Array type
 
