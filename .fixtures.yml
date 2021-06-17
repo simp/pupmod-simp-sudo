@@ -1,8 +1,8 @@
 ---
 fixtures:
   repositories:
-    concat: https://github.com/simp/puppetlabs-concat
-    simplib: https://github.com/simp/pupmod-simp-simplib
-    stdlib: https://github.com/simp/puppetlabs-stdlib
+    concat: https://github.com/simp/puppetlabs-concat.git
+    simplib: https://github.com/simp/pupmod-simp-simplib.git
+    stdlib: https://github.com/simp/puppetlabs-stdlib.git
   symlinks:
     sudo: "#{source_dir}"
