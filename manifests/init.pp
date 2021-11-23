@@ -20,15 +20,18 @@
 #         runas: root
 #         passwd: true
 #
+# @param include_dirs an array of paths to include in the sudoers file
+#
 # @param package_ensure The ensure status of packages to be managed
 #
 # @author https://github.com/simp/pupmod-simp-sudo/graphs/contributors
 #
 class sudo (
-  Hash   $user_specifications = {},
-  Hash   $default_entries     = {},
-  Hash   $aliases             = {},
-  String $package_ensure      = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+  Hash                        $user_specifications = {},
+  Hash                        $default_entries     = {},
+  Hash                        $aliases             = {},
+  String                      $package_ensure      = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+  Array[Stdlib::Absolutepath] $include_dirs        = [],
 ) {
 
   package { 'sudo':
@@ -58,6 +61,12 @@ class sudo (
   $aliases.each |$key, $value| {
     sudo::alias { $key:
       * => $value,
+    }
+  }
+
+  $include_dirs.each | $include_dir | {
+    sudo::include_dir { $include_dir:
+      include_dir => $include_dir,
     }
   }
 }
