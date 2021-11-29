@@ -67,8 +67,8 @@ describe 'sudo' do
 
         context 'should create sudo::include_dir resources with an iterator' do
           let(:hieradata) { 'sudo__include_dirs' }
-          is { is_expected.to create_sudo__include_dir('/etc/sudoers.d') }
-          is { is_expected.to create_sudo__include_dir('/etc/simp_sudoers.d') }
+          it { is_expected.to create_sudo__include_dir('/etc/sudoers.d') }
+          it { is_expected.to create_sudo__include_dir('/etc/simp_sudoers.d') }
         end
       end
     end
