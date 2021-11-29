@@ -1,3 +1,6 @@
+* Mon Nov 29 2021 Mike Riddle <mike@sicura.us> - 5.5.0
+- Added the ability for users to create include clauses in sudoers
+
 * Thu Jun 17 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 5.4.0
 - Removed support for Puppet 5
 - Ensured support for Puppet 7 in requirements and stdlib
