@@ -5,6 +5,8 @@
 define sudo::include_dir (
   Stdlib::Absolutepath $include_dir = '',
 ) {
+  include 'sudo'
+
   file { $include_dir:
     ensure  => 'directory',
     owner   => 'root',
@@ -12,7 +14,8 @@ define sudo::include_dir (
     mode    => '0640',
     recurse => true,
   }
-  concat::fragment { 'sudo_include_dir_$include_dir':
+
+  concat::fragment { "sudo_include_dir_${include_dir}":
     order   => 1000,
     target  => '/etc/sudoers',
     content => "include ${include_dir}",

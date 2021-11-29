@@ -1,0 +1,3 @@
+sudo::include_dirs:
+  - '/etc/sudoers.d'
+  - '/etc/simp_sudoers.d'
