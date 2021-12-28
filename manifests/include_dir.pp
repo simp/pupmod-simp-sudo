@@ -3,7 +3,7 @@
 # @param include_dir the directory to include in /etc/sudoers
 #
 define sudo::include_dir (
-  Optional[Stdlib::Absolutepath] $include_dir,
+  Stdlib::Absolutepath $include_dir,
   Boolean                        $tidy_include_dir = false,
 ) {
   include 'sudo'
