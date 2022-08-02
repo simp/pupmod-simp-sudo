@@ -1,3 +1,6 @@
+* Tue Aug 2 2022 igomura <52306882+igomura@users.noreply.github.com> - 5.5.1
+- Fix include_dir templating
+
 * Mon Nov 29 2021 Mike Riddle <mike@sicura.us> - 5.5.0
 - Added the ability for users to create include clauses in sudoers
 
