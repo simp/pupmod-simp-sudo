@@ -20,6 +20,6 @@ define sudo::include_dir (
   concat::fragment { "sudo_include_dir_${include_dir}":
     order   => 1000,
     target  => '/etc/sudoers',
-    content => "#includedir ${include_dir}",
+    content => "#includedir ${include_dir}\n",
   }
 }
