@@ -1,3 +1,6 @@
+* Mon Jul 24 2023 Chris Tessmer <chris.tessmer@onyxpoint.com> - 5.6.0
+- Add RockyLinux 8 support
+
 * Tue Aug 02 2022 Igor Muratov <52306882+igomura@users.noreply.github.com> - 5.5.1
 - Fix include_dir templating
 
