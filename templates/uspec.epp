@@ -1,0 +1,44 @@
+<% |
+  Array[String[1]]                    $user_list,
+  Array[String[1]]                    $cmnd,
+  Array[Simplib::Hostname,1]          $host_list  = [$facts['networking']['hostname'], $facts['networking']['fqdn']],
+  Variant[String[1],Array[String[1]]] $runas      = ['root'],
+  Boolean                             $passwd     = true,
+  Boolean                             $doexec     = true,
+  Boolean                             $setenv     = true,
+  Hash                                $options    = {},
+| -%>
+<%
+  $_passwd = [
+    $passwd ? {
+      true    => 'PASSWD',
+      default => 'NOPASSWD',
+    }
+  ]
+
+  $_exec = [
+    $doexec ? {
+      true    => 'EXEC',
+      default => 'NOEXEC',
+    }
+  ]
+
+  case $facts['os']['family'] {
+    'RedHat': {
+      $_setenv = [
+        $setenv ? {
+          true    => 'SETENV',
+          default => 'NOSETENV',
+        }
+      ]
+    }
+    default: { $_setenv = [] }
+  }
+
+  $t_tag_spec = $_passwd + $_exec + $_setenv
+
+  $opts = $options.map |$value| {
+    "${$value[0].upcase}=${value[1]}"
+  }
+-%>
+<%= $user_list.join(', ') %>    <%= $host_list.join(', ') %>=(<%= Array($runas, true).join(', ') %>) <%= $opts.join(" ") %> <%= $t_tag_spec.join(':') %>: <%= $cmnd.join(', ') %>

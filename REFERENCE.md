@@ -454,7 +454,7 @@ Data type: `Array[Simplib::Hostname,1]`
 
 Array of hosts where the specified users should be able to execute a command.
 
-Default value: `[$facts['hostname'], $facts['fqdn']]`
+Default value: `[$facts['networking']['hostname'], $facts['networking']['fqdn']]`
 
 ##### <a name="-sudo--user_specification--runas"></a>`runas`
 

@@ -29,9 +29,9 @@ define sudo::alias (
   Array[String[1]]    $content,
   Sudo::AliasType     $alias_type,
   Optional[String[1]] $comment     = undef,
-  Integer             $order       = 10
+  Integer             $order       = 10,
 ) {
-  include '::sudo'
+  include 'sudo'
 
   #  Check if this version is susceptable to cve_2019_14287
   if ($alias_type != 'runas' ) or ( $facts['sudo_version'] and versioncmp($facts['sudo_version'], '1.8.28' ) >= 0 ) {
@@ -43,6 +43,14 @@ define sudo::alias (
   concat::fragment { "sudo_${alias_type}_alias_${name}":
     order   => $order,
     target  => '/etc/sudoers',
-    content => template("${module_name}/alias.erb")
+    content => epp(
+      "${module_name}/alias.epp",
+      {
+        'content'    => $_content,
+        'alias_type' => $alias_type,
+        'comment'    => $comment,
+        'name'       => $name,
+      },
+    ),
   }
 }

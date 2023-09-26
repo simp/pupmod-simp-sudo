@@ -1,0 +1,15 @@
+<% |
+  Array[String[1]]    $content,
+  Optional[String[1]] $target   = undef,
+  Sudo::DefType       $def_type = 'base'
+| -%>
+<%
+  $symbol = $def_type ? {
+    'host'  => '@',
+    'user'  => ':',
+    'runas' => '>',
+    'cmnd'  => '!',
+    default => '',
+  }
+-%>
+Defaults<%= $symbol %><%= $target %>    <%= $content.join(', ') %>
