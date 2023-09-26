@@ -1,0 +1,10 @@
+<% |
+  Array[String[1]]    $content,
+  Sudo::AliasType     $alias_type,
+  Optional[String[1]] $comment,
+  String[1]           $name,
+| -%>
+<% if $comment { -%>
+#<%= $comment %>
+<% } -%>
+<%= $alias_type.capitalize %>_Alias <%= $name.upcase %> = <%= $content.join(', ') %>

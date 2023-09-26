@@ -62,6 +62,18 @@ define sudo::user_specification (
   concat::fragment { "sudo_user_specification_${name}":
     order   => 90,
     target  => '/etc/sudoers',
-    content => template("${module_name}/uspec.erb")
+    content => epp(
+      "${module_name}/uspec.epp",
+      {
+        'user_list' => $user_list,
+        'cmnd'      => $cmnd,
+        'host_list' => $host_list,
+        'runas'     => $_runas,
+        'passwd'    => $passwd,
+        'doexec'    => $doexec,
+        'setenv'    => $setenv,
+        'options'   => $options,
+      },
+    ),
   }
 }

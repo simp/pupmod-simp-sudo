@@ -45,7 +45,7 @@
 define sudo::default_entry (
   Array[String[1]]    $content,
   Optional[String[1]] $target   = undef,
-  Sudo::DefType       $def_type = 'base'
+  Sudo::DefType       $def_type = 'base',
 ) {
   include 'sudo'
 
@@ -59,6 +59,13 @@ define sudo::default_entry (
   concat::fragment { "sudo_default_entry_${name}":
     order   => 80,
     target  => '/etc/sudoers',
-    content => template("${module_name}/defaults.erb")
+    content => epp(
+      "${module_name}/defaults.epp",
+      {
+        'content'  => $_content,
+        'target'   => $target,
+        'def_type' => $def_type,
+      },
+    ),
   }
 }
