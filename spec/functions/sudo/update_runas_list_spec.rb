@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'sudo::update_runas_list' do
   context 'with no ALL in input' do
+    # rubocop:disable RSpec/RepeatedDescription
     it 'returns the same array' do
       input = [ 'you', 'me', 'I' ]
       is_expected.to run.with_params(input).and_return(input)
@@ -10,6 +11,7 @@ describe 'sudo::update_runas_list' do
       input = [ '%you' ]
       is_expected.to run.with_params(input).and_return(input)
     end
+    # rubocop:enable RSpec/RepeatedDescription
   end
   context 'with string as input should return an array' do
     it 'returns the same array' do
