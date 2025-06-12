@@ -12,7 +12,7 @@ describe 'sudo::user_specification' do
           let(:params) do
             {
               user_list: ['joe', 'jimbob', '%foo'],
-            cmnd: ['ifconfig']
+              cmnd: ['ifconfig'],
             }
           end
 
@@ -26,10 +26,10 @@ describe 'sudo::user_specification' do
           let(:params) do
             {
               user_list: ['joe', 'jimbob', '%foo'],
-            cmnd: ['ifconfig', 'tcpdump'],
-            passwd: false,
-            doexec: false,
-            setenv: false
+              cmnd: ['ifconfig', 'tcpdump'],
+              passwd: false,
+              doexec: false,
+              setenv: false,
             }
           end
 
@@ -43,8 +43,8 @@ describe 'sudo::user_specification' do
           let(:params) do
             {
               user_list: ['joe', 'jimbob', '%foo'],
-            cmnd: ['ifconfig', 'tcpdump'],
-            hostlist: []
+              cmnd: ['ifconfig', 'tcpdump'],
+              hostlist: [],
             }
           end
 
@@ -57,11 +57,11 @@ describe 'sudo::user_specification' do
           let(:params) do
             {
               user_list: ['joe', 'jimbob', '%foo'],
-            cmnd: ['ifconfig', 'tcpdump'],
-            passwd: false,
-            doexec: false,
-            setenv: false,
-            options: { 'role' => 'unconfined_r' }
+              cmnd: ['ifconfig', 'tcpdump'],
+              passwd: false,
+              doexec: false,
+              setenv: false,
+              options: { 'role' => 'unconfined_r' },
             }
           end
 
@@ -73,18 +73,18 @@ describe 'sudo::user_specification' do
         # test for cve_2019-14287 mitigation
         context 'with  sudo version <  1.8.28' do
           let(:facts) do
-            os_facts.merge({
-                             'sudo_version' => '1.8.10'
-                           })
+            os_facts.merge(
+              'sudo_version' => '1.8.10',
+            )
           end
           let(:params) do
             {
               user_list: ['joe'],
-            cmnd: ['cat'],
-            runas: 'ALL',
-            passwd: false,
-            doexec: false,
-            setenv: false,
+              cmnd: ['cat'],
+              runas: 'ALL',
+              passwd: false,
+              doexec: false,
+              setenv: false,
             }
           end
 
@@ -95,18 +95,18 @@ describe 'sudo::user_specification' do
         end
         context 'with  sudo version >  1.8.28' do
           let(:facts) do
-            os_facts.merge({
-                             'sudo_version' => '1.8.30'
-                           })
+            os_facts.merge(
+              'sudo_version' => '1.8.30',
+            )
           end
           let(:params) do
             {
               user_list: ['joe'],
-            cmnd: ['cat'],
-            runas: 'ALL',
-            passwd: false,
-            doexec: false,
-            setenv: false,
+              cmnd: ['cat'],
+              runas: 'ALL',
+              passwd: false,
+              doexec: false,
+              setenv: false,
             }
           end
 

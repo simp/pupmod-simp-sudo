@@ -11,12 +11,12 @@ describe 'sudo::alias::host' do
         let(:params) { { content: ['1.2.3.4', '5.6.7.8'], comment: 'generic comment' } }
 
         it do
-          is_expected.to contain_sudo__alias('host_rspec').with({
-                                                                  'content' => ['1.2.3.4', '5.6.7.8'],
+          is_expected.to contain_sudo__alias('host_rspec').with(
+            'content'    => ['1.2.3.4', '5.6.7.8'],
             'order'      => 12,
             'comment'    => 'generic comment',
-            'alias_type' => 'host'
-                                                                })
+            'alias_type' => 'host',
+          )
         end
       end
     end

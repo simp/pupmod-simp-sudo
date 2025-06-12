@@ -14,40 +14,40 @@ describe 'sudo class' do
   # rubocop:enable RSpec/IndexedLet
 
   let(:manifest) do
-    <<-EOS
-   include 'sudo'
+    <<~EOS
+      include 'sudo'
 
-   sudo::user_specification { "group1_sudo_access":
-      user_list => ["%#{group1}"],
-      runas     => 'root',
-      cmnd      => ["#{script1}"],
-      passwd    => false
-    }
-   sudo::alias { 'USERALIAS':
-      alias_type => 'user',
-      content    => ["#{user2}"]
+      sudo::user_specification { "group1_sudo_access":
+        user_list => ["%#{group1}"],
+        runas     => 'root',
+        cmnd      => ["#{script1}"],
+        passwd    => false,
+      }
+      sudo::alias { 'USERALIAS':
+        alias_type => 'user',
+        content    => ["#{user2}"],
       }
 
-  sudo::alias { 'CMDALIAS':
-     alias_type => 'cmnd',
-     content    => ["#{script2}","#{script1}"]
-     }
+      sudo::alias { 'CMDALIAS':
+        alias_type => 'cmnd',
+        content    => ["#{script2}","#{script1}"],
+      }
 
-   sudo::user_specification { "user2_sudo_access":
-      user_list => ['USERALIAS'],
-      runas     => 'root',
-      cmnd      => ['CMDALIAS'],
-      passwd    => false
-    }
-    #set the users to be able to run sudo without tty
-    sudo::default_entry {'user_no_tty':
-      def_type => 'user',
-      content  => ["#{user2},#{user1} !requiretty, visiblepw"]
-    }
-    #set timeout to 4 seconds so fails don't hang forever
-    sudo::default_entry { '00timeout':
-      content => [ 'passwd_timeout=0.1']
-    }
+      sudo::user_specification { "user2_sudo_access":
+        user_list => ['USERALIAS'],
+        runas     => 'root',
+        cmnd      => ['CMDALIAS'],
+        passwd    => false,
+      }
+      #set the users to be able to run sudo without tty
+      sudo::default_entry {'user_no_tty':
+        def_type => 'user',
+        content  => ["#{user2},#{user1} !requiretty, visiblepw"],
+      }
+      #set timeout to 4 seconds so fails don't hang forever
+      sudo::default_entry { '00timeout':
+        content => [ 'passwd_timeout=0.1'],
+      }
     EOS
   end
 

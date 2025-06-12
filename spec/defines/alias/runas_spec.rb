@@ -10,12 +10,12 @@ describe 'sudo::alias::runas' do
           let(:params) { { content: ['millert', 'mikef'], comment: 'generic comment' } }
 
           it do
-            is_expected.to contain_sudo__alias('runas_rspec').with({
-                                                                     'content' => ['millert', 'mikef'],
+            is_expected.to contain_sudo__alias('runas_rspec').with(
+              'content'    => ['millert', 'mikef'],
               'order'      => 14,
               'comment'    => 'generic comment',
-              'alias_type' => 'runas'
-                                                                   })
+              'alias_type' => 'runas',
+            )
           end
         end
       end

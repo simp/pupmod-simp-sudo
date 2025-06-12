@@ -11,7 +11,7 @@ describe 'sudo::alias' do
           let(:params) do
             {
               content: ['millert', 'mikef'],
-           alias_type: 'user'
+              alias_type: 'user',
             }
           end
 
@@ -28,8 +28,8 @@ describe 'sudo::alias' do
           let(:params) do
             {
               content: ['millert', 'mikef'],
-           alias_type: 'runas',
-           comment: 'generic comment'
+              alias_type: 'runas',
+              comment: 'generic comment',
             }
           end
 
@@ -46,8 +46,8 @@ describe 'sudo::alias' do
           let(:params) do
             {
               content: ['ALL', '!mikef'],
-           alias_type: 'runas',
-           comment: 'generic comment'
+              alias_type: 'runas',
+              comment: 'generic comment',
             }
           end
 

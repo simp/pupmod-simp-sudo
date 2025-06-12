@@ -20,8 +20,11 @@ describe 'sudo::default_entry' do
 
         context 'def_type = host and target specified' do
           let(:params) do
-            { content: ['first', 'second'], def_type: 'host',
-             target: 'some_host_target' }
+            {
+              content: ['first', 'second'],
+              def_type: 'host',
+              target: 'some_host_target',
+            }
           end
 
           it { is_expected.to compile.with_all_deps }
@@ -33,8 +36,11 @@ describe 'sudo::default_entry' do
 
         context 'def_type = cmnd and target specified' do
           let(:params) do
-            { content: ['first', 'second'], def_type: 'cmnd',
-               target: 'some_cmnd_target' }
+            {
+              content: ['first', 'second'],
+              def_type: 'cmnd',
+              target: 'some_cmnd_target',
+            }
           end
 
           it { is_expected.to compile.with_all_deps }

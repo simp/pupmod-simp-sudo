@@ -11,12 +11,12 @@ describe 'sudo::alias::cmnd' do
         let(:params) { { content: ['/usr/sbin/shutdown, /usr/sbin/reboot'], comment: 'generic comment' } }
 
         it do
-          is_expected.to contain_sudo__alias('my_alias').with({
-                                                                'content' => ['/usr/sbin/shutdown, /usr/sbin/reboot'],
+          is_expected.to contain_sudo__alias('my_alias').with(
+            'content'    => ['/usr/sbin/shutdown, /usr/sbin/reboot'],
             'order'      => 10,
             'comment'    => 'generic comment',
-            'alias_type' => 'cmnd'
-                                                              })
+            'alias_type' => 'cmnd',
+          )
         end
       end
     end
