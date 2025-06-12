@@ -4,12 +4,14 @@ test_name 'sudo class'
 
 describe 'sudo class' do
   let(:files_dir) { File.join(File.dirname(__FILE__), 'files') }
+  # rubocop:disable RSpec/IndexedLet
   let(:script1) { '/usr/sbin/sudo_test_script1' }
   let(:script2) { '/usr/sbin/sudo_test_script2' }
   let(:user1) { 'testuser1' }
   let(:user2) { 'testuser2' }
   let(:group1) { 'testgroup1' }
   let(:password) { 'T3stT3stP@ssw0rd' }
+  # rubocop:enable RSpec/IndexedLet
 
   let(:manifest) do
     <<-EOS
