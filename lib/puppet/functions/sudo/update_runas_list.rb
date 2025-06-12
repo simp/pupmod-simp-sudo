@@ -3,7 +3,6 @@
 #  of -1 if ALL or %ALL is used.
 #
 Puppet::Functions.create_function(:'sudo::update_runas_list') do
-
   # @param content
   #  An array of users/groups to add to a Runas_list in sudo
   #
@@ -33,7 +32,6 @@ Puppet::Functions.create_function(:'sudo::update_runas_list') do
   end
 
   def update_runas_list(content)
-
     output = content.dup
 
     if content.member?('ALL')
@@ -44,13 +42,11 @@ Puppet::Functions.create_function(:'sudo::update_runas_list') do
     end
 
     output.uniq
-
   end
 
   def update_runas_list_string(content)
-    output = Array.new
+    output = []
     output << content
     update_runas_list(output)
   end
-
 end
