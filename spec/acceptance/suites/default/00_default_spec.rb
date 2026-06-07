@@ -53,7 +53,7 @@ describe 'sudo class' do
 
   hosts.each do |host|
     context 'with defaults' do
-      let(:os_version) { fact_on(host, 'operatingsystemmajrelease') }
+      let(:os_version) { fact_on(host, 'os.release.major') }
 
       it 'creates users' do
         on(host, "openssl passwd #{password}").stdout
