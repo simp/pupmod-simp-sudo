@@ -52,8 +52,9 @@ describe 'sudo class' do
   end
 
   hosts.each do |host|
-    os_version = fact_on(host, 'operatingsystemmajrelease')
     context 'with defaults' do
+      let(:os_version) { fact_on(host, 'operatingsystemmajrelease') }
+
       it 'creates users' do
         on(host, "openssl passwd #{password}").stdout
         on(host, "groupadd #{group1} -g 5000")
