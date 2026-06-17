@@ -23,7 +23,7 @@ describe 'sudo::include_dir' do
                   group:   'root',
                   recurse: true,
                 )
-            is_expected.to create_concat__fragment('sudo_include_dir_/etc/sudoers.d')
+            is_expected.to create_file('/etc/sudoers.d/1000_includedir__etc_sudoers_d')
               .with_content("#includedir /etc/sudoers.d\n")
           end
         end

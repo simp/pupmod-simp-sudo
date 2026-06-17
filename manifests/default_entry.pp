@@ -56,9 +56,13 @@ define sudo::default_entry (
     $_content = sudo::update_runas_list($content)
   }
 
-  concat::fragment { "sudo_default_entry_${name}":
-    order   => 80,
-    target  => '/etc/sudoers',
+  $_filename = sprintf('%04d_default_%s', 80, regsubst($name, '[^0-9A-Za-z_-]', '_', 'G'))
+
+  file { "${sudo::content_dir}/${_filename}":
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0440',
     content => epp(
       "${module_name}/defaults.epp",
       {
@@ -67,5 +71,6 @@ define sudo::default_entry (
         'def_type' => $def_type,
       },
     ),
+    require => Package['sudo'],
   }
 }

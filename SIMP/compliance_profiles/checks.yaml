@@ -1,0 +1,8 @@
+---
+version: 2.0.0
+checks:
+  simp:defaults.sudo.package_ensure:
+    type: puppet-class-parameter
+    settings:
+      parameter: sudo::package_ensure
+      value: installed

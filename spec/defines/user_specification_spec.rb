@@ -17,7 +17,7 @@ describe 'sudo::user_specification' do
           end
 
           it do
-            is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
+            is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
               .with_content("joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root)  PASSWD:EXEC:SETENV: ifconfig\n")
           end
         end
@@ -34,7 +34,7 @@ describe 'sudo::user_specification' do
           end
 
           it do
-            is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
+            is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
               .with_content("joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root)  NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n")
           end
         end
@@ -66,7 +66,7 @@ describe 'sudo::user_specification' do
           end
 
           it do
-            is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
+            is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
               .with_content("joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root) ROLE=unconfined_r NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n")
           end
         end
@@ -89,7 +89,7 @@ describe 'sudo::user_specification' do
           end
 
           it do
-            is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
+            is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
               .with_content("joe    #{facts[:hostname]}, #{facts[:fqdn]}=(ALL, !#-1)  NOPASSWD:NOEXEC:NOSETENV: cat\n")
           end
         end
@@ -111,7 +111,7 @@ describe 'sudo::user_specification' do
           end
 
           it do
-            is_expected.to create_concat__fragment("sudo_user_specification_#{title}")
+            is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
               .with_content("joe    #{facts[:hostname]}, #{facts[:fqdn]}=(ALL)  NOPASSWD:NOEXEC:NOSETENV: cat\n")
           end
         end

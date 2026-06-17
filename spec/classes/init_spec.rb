@@ -9,9 +9,21 @@ describe 'sudo' do
         end
 
         context 'with default parameters' do
+          # A bare `include sudo` must install the package and do nothing
+          # else -- it must not take ownership of (or blank) /etc/sudoers,
+          # and must not drop any files into /etc/sudoers.d.
+          it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('sudo') }
-          it { is_expected.to contain_package('sudo') }
-          it { is_expected.to contain_concat('/etc/sudoers') }
+          it { is_expected.to contain_package('sudo').with_ensure('installed') }
+          it { is_expected.not_to contain_concat('/etc/sudoers') }
+          it { is_expected.not_to contain_file('/etc/sudoers') }
+
+          it 'declares no resources under /etc/sudoers.d' do
+            files = catalogue.resources.select do |r|
+              r.type == 'File' && r[:path].to_s.start_with?('/etc/sudoers.d')
+            end
+            expect(files).to be_empty
+          end
         end
 
         context 'should create sudo::user_specification resources with an iterator' do
