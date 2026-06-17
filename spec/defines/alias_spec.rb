@@ -17,7 +17,7 @@ describe 'sudo::alias' do
 
           it { is_expected.to compile.with_all_deps }
           it {
-            is_expected.to contain_concat__fragment("sudo_#{params[:alias_type]}_alias_#{title}").with_content(
+            is_expected.to contain_file("/etc/sudoers.d/0010_#{params[:alias_type]}_alias_#{title}").with_content(
               "User_Alias USER_ALIAS1 = millert, mikef\n",
             )
           }
@@ -35,7 +35,7 @@ describe 'sudo::alias' do
 
           it { is_expected.to compile.with_all_deps }
           it {
-            is_expected.to contain_concat__fragment("sudo_#{params[:alias_type]}_alias_#{title}").with_content(
+            is_expected.to contain_file("/etc/sudoers.d/0010_#{params[:alias_type]}_alias_#{title}").with_content(
               "#generic comment\nRunas_Alias RUNAS_ALIAS7 = millert, mikef\n",
             )
           }
@@ -55,7 +55,7 @@ describe 'sudo::alias' do
             let(:facts) { os_facts.merge({ sudo_version: '1.8.18' }) }
 
             it {
-              is_expected.to contain_concat__fragment("sudo_#{params[:alias_type]}_alias_#{title}").with_content(
+              is_expected.to contain_file("/etc/sudoers.d/0010_#{params[:alias_type]}_alias_#{title}").with_content(
                 "#generic comment\nRunas_Alias RUNAS_ALL = ALL, !mikef, !#-1\n",
               )
             }
@@ -64,7 +64,7 @@ describe 'sudo::alias' do
             let(:facts) { os_facts.merge({ sudo_version: '1.8.28' }) }
 
             it {
-              is_expected.to contain_concat__fragment("sudo_#{params[:alias_type]}_alias_#{title}").with_content(
+              is_expected.to contain_file("/etc/sudoers.d/0010_#{params[:alias_type]}_alias_#{title}").with_content(
                 "#generic comment\nRunas_Alias RUNAS_ALL = ALL, !mikef\n",
               )
             }

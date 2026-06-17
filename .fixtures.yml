@@ -1,7 +1,9 @@
 ---
 fixtures:
   repositories:
-    concat: https://github.com/simp/puppetlabs-concat.git
+    compliance_engine:
+      repo: https://github.com/simp/rubygem-simp-compliance_engine.git
+      ref: '1.0.0'
     simplib: https://github.com/simp/pupmod-simp-simplib.git
     stdlib: https://github.com/simp/puppetlabs-stdlib.git
   symlinks:

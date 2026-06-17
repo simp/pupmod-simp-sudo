@@ -40,9 +40,13 @@ define sudo::alias (
     $_content = sudo::update_runas_list($content)
   }
 
-  concat::fragment { "sudo_${alias_type}_alias_${name}":
-    order   => $order,
-    target  => '/etc/sudoers',
+  $_filename = sprintf('%04d_%s_alias_%s', $order, $alias_type, regsubst($name, '[^0-9A-Za-z_-]', '_', 'G'))
+
+  file { "${sudo::content_dir}/${_filename}":
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0440',
     content => epp(
       "${module_name}/alias.epp",
       {
@@ -52,5 +56,6 @@ define sudo::alias (
         'name'       => $name,
       },
     ),
+    require => Package['sudo'],
   }
 }

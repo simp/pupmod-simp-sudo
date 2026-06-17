@@ -24,26 +24,26 @@
 #
 # @param package_ensure The ensure status of packages to be managed
 #
+# @param content_dir
+#   The directory under which this module writes its managed sudoers
+#   drop-in files. Defaults to `/etc/sudoers.d`, which sudo reads via the
+#   distribution's `#includedir` directive. Each managed entry is written as
+#   its own file here, so the shared `/etc/sudoers` is never owned by this
+#   module.
+#
 # @author https://github.com/simp/pupmod-simp-sudo/graphs/contributors
 #
 class sudo (
   Hash                        $user_specifications = {},
   Hash                        $default_entries     = {},
   Hash                        $aliases             = {},
-  String                      $package_ensure      = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+  String[1]                   $package_ensure      = 'installed',
   Array[Stdlib::Absolutepath] $include_dirs        = [],
+  Stdlib::Absolutepath        $content_dir         = '/etc/sudoers.d',
 ) {
 
   package { 'sudo':
     ensure => $package_ensure
-  }
-
-  concat { '/etc/sudoers':
-    owner        => 'root',
-    group        => 'root',
-    mode         => '0440',
-    validate_cmd => '/usr/sbin/visudo -q -c -f %',
-    require      => Package['sudo']
   }
 
   $user_specifications.each |$spec, $options| {

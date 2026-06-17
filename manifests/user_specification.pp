@@ -59,9 +59,13 @@ define sudo::user_specification (
     $_runas =  sudo::update_runas_list($runas)
   }
 
-  concat::fragment { "sudo_user_specification_${name}":
-    order   => 90,
-    target  => '/etc/sudoers',
+  $_filename = sprintf('%04d_uspec_%s', 90, regsubst($name, '[^0-9A-Za-z_-]', '_', 'G'))
+
+  file { "${sudo::content_dir}/${_filename}":
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0440',
     content => epp(
       "${module_name}/uspec.epp",
       {
@@ -75,5 +79,6 @@ define sudo::user_specification (
         'options'   => $options,
       },
     ),
+    require => Package['sudo'],
   }
 }
