@@ -17,9 +17,14 @@ define sudo::include_dir (
     recurse => true,
   }
 
-  concat::fragment { "sudo_include_dir_${include_dir}":
-    order   => 1000,
-    target  => '/etc/sudoers',
+  $_filename = sprintf('%04d_includedir_%s', 1000, regsubst($include_dir, '[^0-9A-Za-z_-]', '_', 'G'))
+
+  file { "${sudo::content_dir}/${_filename}":
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0440',
     content => "#includedir ${include_dir}\n",
+    require => Package['sudo'],
   }
 }

@@ -1,3 +1,19 @@
+* Tue Jun 17 2026 Steven Pritchard <steven.pritchard@gmail.com> - 7.0.0
+- Reduce blast radius (BREAKING CHANGE): a bare `include sudo` now installs
+  the `sudo` package and does nothing else
+  - The module no longer manages (or blanks) the shared `/etc/sudoers`
+  - Managed aliases, defaults, user specifications, and `#includedir` lines
+    are now written as individual drop-in files under `/etc/sudoers.d/`
+    (configurable via the new `sudo::content_dir` parameter)
+  - Dropped the `puppetlabs/concat` dependency; sudoers content is no longer
+    validated with `visudo` (cross-file alias references cannot be validated
+    in isolation)
+  - `sudo::package_ensure` no longer follows `simp_options::package_ensure`
+    (defaults to `installed`)
+- Ship a `simp:defaults` compliance_engine profile that restores the
+  pre-refactor defaults; activate with
+  `compliance_engine::enforcement: [simp:defaults]`
+
 * Mon Jun 08 2026 Steven Pritchard <steven.pritchard@gmail.com> - 6.0.0
 - Switch `requirements` from `puppet` to `openvox` (>= 8 < 9)
 - Point `issues_url` at GitHub Issues

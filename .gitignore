@@ -12,6 +12,7 @@ dist
 # Read everything in fixtures
 /spec/fixtures/*
 # Un-ignore hieradata
+!/spec/fixtures/hieradata/
 !/spec/fixtures/hieradata/*
 # Except this one, which is auto-generated
 /spec/fixtures/hieradata/hiera.yaml

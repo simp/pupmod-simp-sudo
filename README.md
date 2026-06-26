@@ -21,14 +21,58 @@
 
 ## Module Description
 
-Constructs a sudoers file based on configuration aliases, defaults, and user
-specifications.
+Manages sudo configuration through aliases, defaults, and user
+specifications, written as individual drop-in files under `/etc/sudoers.d/`.
 
-## Setup
+## Breaking changes in 7.0.0
+
+Version 7.0.0 reduces the "blast radius" of this module. **A bare
+`include sudo` now installs the `sudo` package and does nothing else.** In
+particular:
+
+- The module **no longer manages `/etc/sudoers`**. Previously a bare
+  `include sudo` declared a `concat` resource for `/etc/sudoers`, which took
+  whole-file ownership of that shared file and, with no entries configured,
+  *blanked* it (wiping the OS-shipped `Defaults` and `#includedir`). The OS
+  `/etc/sudoers` is now left untouched.
+- All managed entries (`sudo::alias`, `sudo::default_entry`,
+  `sudo::user_specification`, and the `#includedir` lines from
+  `sudo::include_dir`) are now written as **individual files under
+  `/etc/sudoers.d/`** (configurable via the `sudo::content_dir` parameter),
+  which sudo reads via its default `#includedir`. File names carry a
+  numeric prefix so the previous relative ordering (aliases, then defaults,
+  then user specifications) is preserved.
+- The **`puppetlabs/concat` dependency has been removed.** As a consequence,
+  sudoers content is **no longer validated with `visudo`** before being
+  written. A `sudo::user_specification` may reference a `User_Alias` or
+  `Cmnd_Alias` defined in a separate file, and such cross-file references
+  cannot be validated in isolation, so per-file validation was dropped.
+- `sudo::package_ensure` no longer follows `simp_options::package_ensure`;
+  it defaults to `installed`.
+
+### Recovery paths
+
+1. **Per parameter:** set the parameters you need explicitly (the defines
+   work exactly as before — they simply write to `/etc/sudoers.d/` now).
+2. **`simp:defaults` profile:** enable the shipped compliance_engine
+   profile to restore the pre-refactor defaults stack-wide:
+
+   ```yaml
+   compliance_engine::enforcement:
+     - simp:defaults
+   ```
+
+   For sudo this restores `sudo::package_ensure: installed`. A value set
+   explicitly in your own Hiera always wins over the profile.
+
+   > **Note:** the profile restores parameter *values* only. The former
+   > whole-file management of `/etc/sudoers` was structurally removed (there
+   > is no parameter for it) and is intentionally **not** restorable.
 
 ### What sudo affects
 
-sudo will ensure the sudo package is installed, and will manage /etc/sudoers.
+sudo ensures the `sudo` package is installed and, when entries are
+configured, writes them as drop-in files under `/etc/sudoers.d/`.
 
 ### Setup Requirements
 
@@ -37,7 +81,7 @@ into your modulepath
 
 ### Beginning with sudo
 
-To create the default SIMP /etc/sudoers file:
+A bare include installs the package only:
 
 ```puppet
 include 'sudo'

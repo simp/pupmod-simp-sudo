@@ -42,6 +42,7 @@ The following parameters are available in the `sudo` class:
 * [`user_specifications`](#-sudo--user_specifications)
 * [`include_dirs`](#-sudo--include_dirs)
 * [`package_ensure`](#-sudo--package_ensure)
+* [`content_dir`](#-sudo--content_dir)
 * [`default_entries`](#-sudo--default_entries)
 * [`aliases`](#-sudo--aliases)
 
@@ -79,11 +80,23 @@ Default value: `[]`
 
 ##### <a name="-sudo--package_ensure"></a>`package_ensure`
 
-Data type: `String`
+Data type: `String[1]`
 
 The ensure status of packages to be managed
 
-Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
+Default value: `'installed'`
+
+##### <a name="-sudo--content_dir"></a>`content_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory under which this module writes its managed sudoers
+drop-in files. Defaults to `/etc/sudoers.d`, which sudo reads via the
+distribution's `#includedir` directive. Each managed entry is written as
+its own file here, so the shared `/etc/sudoers` is never owned by this
+module.
+
+Default value: `'/etc/sudoers.d'`
 
 ##### <a name="-sudo--default_entries"></a>`default_entries`
 
