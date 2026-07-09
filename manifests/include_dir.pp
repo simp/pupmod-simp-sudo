@@ -2,9 +2,12 @@
 #
 # @param include_dir the directory to include in /etc/sudoers
 #
+# @param tidy_include_dir
+#   Whether to purge files in $include_dir that are not managed by Puppet
+#
 define sudo::include_dir (
   Stdlib::Absolutepath $include_dir,
-  Boolean                        $tidy_include_dir = false,
+  Boolean              $tidy_include_dir = false,
 ) {
   include 'sudo'
 
