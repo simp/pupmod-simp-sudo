@@ -8,7 +8,7 @@ This file provides guidance to AI agents when working with code in this reposito
 configuration. It installs the `sudo` package and composes a single
 `/etc/sudoers` file from discrete, individually-declared fragments using
 `puppetlabs/concat`, validating the result with `visudo` before it is written
-(`manifests/init.pp:41-47`).
+(`manifests/init.pp`).
 
 The module does not manage one monolithic template. Instead it exposes a set of
 building blocks — user specifications, aliases, `Defaults` entries, and
@@ -18,29 +18,29 @@ hashes, or you can declare the defined types directly.
 
 ### Business logic
 
-The single class is `sudo` (`manifests/init.pp:29-72`); everything else is a
+The single class is `sudo` (`manifests/init.pp`); everything else is a
 defined type. None of the manifests are `assert_private()`'d, and every defined
-type does `include 'sudo'` (e.g. `user_specification.pp:53`,
-`include_dir.pp:9`), so declaring any fragment pulls in the base class, the
+type does `include 'sudo'` (e.g. `user_specification.pp`,
+`include_dir.pp`), so declaring any fragment pulls in the base class, the
 `sudo` package, and the `/etc/sudoers` concat automatically.
 
-- **`sudo` (`manifests/init.pp:29-72`)** — entry class. Parameters
-  (`init.pp:30-34`): `$user_specifications`, `$default_entries`, `$aliases`
+- **`sudo` (`manifests/init.pp`)** — entry class. Parameters
+  (`init.pp`): `$user_specifications`, `$default_entries`, `$aliases`
   (all `Hash`, default `{}`), `$package_ensure` (`String`), and `$include_dirs`
   (`Array[Stdlib::Absolutepath]`, default `[]`). It declares
   `package { 'sudo' }`, the `concat { '/etc/sudoers' }` target (mode `0440`,
   `validate_cmd => '/usr/sbin/visudo -q -c -f %'`), then iterates each hash and
   fans it out to the matching defined type via the splat (`*`) operator
-  (`init.pp:49-71`). Hiera hashes are deep-merged (`hiera.yaml` /
+  (`init.pp`). Hiera hashes are deep-merged (`hiera.yaml` /
   `data/common.yaml` `lookup_options`).
 
-- **`sudo::user_specification` (`manifests/user_specification.pp:43-79`)** — one
+- **`sudo::user_specification` (`manifests/user_specification.pp`)** — one
   sudoers user-spec line (`user host=(runas) TAGS: cmnd`). Renders
   `templates/uspec.epp` into a fragment at `order => 90`. `$host_list` defaults
-  to the node's own hostname + FQDN (`user_specification.pp:46`); `$runas`
+  to the node's own hostname + FQDN (`user_specification.pp`); `$runas`
   defaults to `['root']`.
 
-- **`sudo::alias` (`manifests/alias.pp:28-56`)** — a single alias entry
+- **`sudo::alias` (`manifests/alias.pp`)** — a single alias entry
   (`User_Alias`/`Host_Alias`/`Runas_Alias`/`Cmnd_Alias`). Takes an
   `$alias_type` of type `Sudo::AliasType` and renders `templates/alias.epp`
   into a fragment whose default `order` is `10`.
@@ -48,14 +48,14 @@ type does `include 'sudo'` (e.g. `user_specification.pp:53`,
 - **`sudo::alias::cmnd` / `::host` / `::runas` / `::user`
   (`manifests/alias/*.pp`)** — thin convenience wrappers that call
   `sudo::alias` with a fixed `alias_type` and a type-specific default `order`
-  (cmnd `10`, host `12`, runas `14`, user `16`). See `alias/cmnd.pp:19-30`.
+  (cmnd `10`, host `12`, runas `14`, user `16`). See `alias/cmnd.pp`.
 
-- **`sudo::default_entry` (`manifests/default_entry.pp:45-71`)** — one
+- **`sudo::default_entry` (`manifests/default_entry.pp`)** — one
   `Defaults` line. `$def_type` (`Sudo::DefType`, default `'base'`) selects the
   `Defaults` binding symbol (`@`/`:`/`>`/`!` or none) in `templates/defaults.epp`.
   Fragment `order => 80`.
 
-- **`sudo::include_dir` (`manifests/include_dir.pp:5-25`)** — manages an
+- **`sudo::include_dir` (`manifests/include_dir.pp`)** — manages an
   `#includedir` directory as a `file` resource and appends an
   `#includedir <path>` line as a fragment at `order => 1000` (last), so drop-in
   files are sourced after everything the module wrote inline. `$tidy_include_dir`
@@ -76,13 +76,13 @@ guards against this:
 - The `sudo::update_runas_list` function
   (`lib/puppet/functions/sudo/update_runas_list.rb`) appends `!#-1` when `ALL`
   is present and `!%#-1` when `%ALL` is present, de-duplicated
-  (`update_runas_list.rb:34-45`). It has two dispatches — one for `Array`, one
+  (`update_runas_list.rb`). It has two dispatches — one for `Array`, one
   for a single `String`.
 - Three call sites apply it **only** for runas content **and only** when the
   fact is absent or the version is `< 1.8.28`
   (`versioncmp(..., '1.8.28') >= 0` short-circuits it):
-  `user_specification.pp:56-60`, `alias.pp:37-41` (only when
-  `$alias_type == 'runas'`), and `default_entry.pp:53-57` (only when
+  `user_specification.pp`, `alias.pp` (only when
+  `$alias_type == 'runas'`), and `default_entry.pp` (only when
   `$def_type == 'runas'`). On current sudo (EL8+ ships ≥ 1.8.28) the content
   passes through unchanged.
 
@@ -93,11 +93,11 @@ guards against this:
   fragment cannot be declared in isolation from the class's package/concat
   resources.
 - **`user_specification` targets the local node by default.** `$host_list`
-  defaults to `[hostname, fqdn]` (`user_specification.pp:46`), not `ALL`. If you
+  defaults to `[hostname, fqdn]` (`user_specification.pp`), not `ALL`. If you
   want a spec to apply everywhere, pass `host_list => ['ALL']` explicitly.
 - **`SETENV`/`NOSETENV` is only emitted on RedHat-family hosts.** `uspec.epp`
   gates the setenv tag on `$facts['os']['family'] == 'RedHat'`
-  (`templates/uspec.epp:26-36`); on other families the `$setenv` parameter has
+  (`templates/uspec.epp`); on other families the `$setenv` parameter has
   no effect on output.
 - **The CVE mitigation is version- and type-conditional** (see the seam above).
   It fires only for `runas`-flavored content on old sudo; do not "simplify" it
@@ -108,10 +108,10 @@ guards against this:
   (`templates/*.epp`), rendered with `epp()` and typed parameter blocks — not
   Ruby ERB. Edit them as Puppet, not Ruby.
 - **`simplib::lookup` is the only `simp_options` seam.** The sole SIMP option
-  consumed is `simp_options::package_ensure` at `init.pp:33` (default
+  consumed is `simp_options::package_ensure` at `init.pp` (default
   `'installed'`). There is no `simp_options::sudo`-style master switch.
 - **`simp/simp_options` is NOT a declared dependency** in `metadata.json`, yet
-  `init.pp:33` reads the `simp_options::*` seam via `simplib::lookup` (provided
+  `init.pp` reads the `simp_options::*` seam via `simplib::lookup` (provided
   by `simp/simplib`). Keep routing feature toggles through `simplib::lookup`
   with an explicit `default_value` rather than assuming `simp_options` is
   included.
@@ -134,11 +134,11 @@ There are **no optional dependencies** — `metadata.json` has no
 Runtime requirement (from `metadata.json` `requirements`): `openvox
 >= 8.0.0 < 9.0.0`. This module has migrated its runtime baseline from Puppet to
 **OpenVox**. The `Gemfile` reflects the transition: the default test version is
-`['>= 8', '< 9']` (`Gemfile:23`) and it installs **both** the `openvox` and
+`['>= 8', '< 9']` (`Gemfile`) and it installs **both** the `openvox` and
 `puppet` gems in a loop — `['openvox', 'puppet'].each do |gem_name|`
-(`Gemfile:30-32`). This "both gems" install is a temporary shim kept only until
+(`Gemfile`). This "both gems" install is a temporary shim kept only until
 the `puppet` gem dependency is removed from the other gems in the stack (see the
-comment at `Gemfile:29`); OpenVox is a drop-in Puppet fork, so the two coexist.
+comment at `Gemfile`); OpenVox is a drop-in Puppet fork, so the two coexist.
 
 Supported OS matrix (from `metadata.json`): CentOS 9/10; RedHat 8/9/10;
 OracleLinux 8/9/10; Rocky 8/9/10; AlmaLinux 8/9/10.
@@ -177,9 +177,9 @@ OracleLinux 8/9/10; Rocky 8/9/10; AlmaLinux 8/9/10.
 `puppet-syntax`, `puppet-style` (lint + `metadata_lint`), `ruby-style`
 (rubocop, `continue-on-error`), `file-checks`, `releng-checks` (version/tag
 checks + a test `pdk build`), and `spec-tests` (`parallel_spec` on Puppet 8.x) —
-plus an **active `acceptance` job** (`pr_tests.yml:116-146`). The acceptance job
-runs a matrix of `almalinux9` and `almalinux10` (`pr_tests.yml:121-123`) under
-`BEAKER_HYPERVISOR: 'vagrant_libvirt'` (`pr_tests.yml:143`), driving
+plus an **active `acceptance` job** (`pr_tests.yml`). The acceptance job
+runs a matrix of `almalinux9` and `almalinux10` (`pr_tests.yml`) under
+`BEAKER_HYPERVISOR: 'vagrant_libvirt'` (`pr_tests.yml`), driving
 `bundle exec rake beaker:suites[default,<node>]` on a libvirt/QEMU Vagrant setup.
 
 ## Common commands
@@ -208,13 +208,13 @@ puppet strings generate --format markdown --out REFERENCE.md
 bundle exec rake beaker:suites[default,almalinux9]
 ```
 
-Relevant gem pins (from `Gemfile`): `rubocop ~> 1.88.0` (`Gemfile:16`),
-`puppetlabs_spec_helper ~> 8.0.0` (`Gemfile:33`), `simp-rake-helpers ~> 5.24.0`
-(`Gemfile:39`), `simp-beaker-helpers ~> 2.0.0` (`Gemfile:56`). The default
-tested version range is `>= 8 < 9` (`Gemfile:23`), and both the `openvox` and
-`puppet` gems are installed for the transition (`Gemfile:30-32`).
+Relevant gem pins (from `Gemfile`): `rubocop ~> 1.88.0` (`Gemfile`),
+`puppetlabs_spec_helper ~> 8.0.0` (`Gemfile`), `simp-rake-helpers ~> 5.24.0`
+(`Gemfile`), `simp-beaker-helpers ~> 2.0.0` (`Gemfile`). The default
+tested version range is `>= 8 < 9` (`Gemfile`), and both the `openvox` and
+`puppet` gems are installed for the transition (`Gemfile`).
 `spec/spec_helper.rb` requires `puppetlabs_spec_helper/module_spec_helper`
-(`spec_helper.rb:11`).
+(`spec_helper.rb`).
 
 ## Conventions
 
