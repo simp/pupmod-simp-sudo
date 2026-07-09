@@ -235,8 +235,6 @@ tested version range is `>= 8 < 9` (`Gemfile`), and both the `openvox` and
   explicit default rather than assuming `simp_options` is included.
 - **Templates are `.epp` (Puppet), not `.erb` (Ruby).** Keep the typed parameter
   block at the top of each template.
-- `Gemfile`, `spec/spec_helper.rb`, and `.github/workflows/pr_tests.yml` carry a
-  **puppetsync** notice — they are baseline-managed and the next sync overwrites
-  local edits. Push changes to those files upstream to the baseline, not here.
+- Several baseline files carry a **puppetsync** notice — e.g. `Gemfile`, `spec/spec_helper.rb`, `.github/workflows/pr_tests.yml`, and the `.gitignore`/`.pdkignore` dotfiles — so they are baseline-managed and the next sync overwrites local edits. Check each file's header for the notice rather than treating this list as exhaustive; push changes to any such file upstream to the baseline, not here.
 - Match the existing 2-space Puppet indentation and aligned-arrow parameter
   style used in the manifests.
