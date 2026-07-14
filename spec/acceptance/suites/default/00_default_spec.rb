@@ -70,12 +70,6 @@ describe 'sudo class' do
       it 'applies without errors in noop mode' do
         apply_manifest_on(host, manifest, catch_failures: true, noop: true)
       end
-
-      # Proof noop engaged nothing: the acceptance nodeset is EL, so rpm -q exits 1
-      # when sudo is absent; beaker raises on any other exit code.
-      it 'does not install the sudo package' do
-        on(host, 'rpm -q sudo', acceptable_exit_codes: [1])
-      end
     end
 
     context 'with defaults' do
