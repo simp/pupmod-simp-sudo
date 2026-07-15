@@ -40,10 +40,10 @@ specifications.
 The following parameters are available in the `sudo` class:
 
 * [`user_specifications`](#-sudo--user_specifications)
-* [`include_dirs`](#-sudo--include_dirs)
-* [`package_ensure`](#-sudo--package_ensure)
 * [`default_entries`](#-sudo--default_entries)
 * [`aliases`](#-sudo--aliases)
+* [`include_dirs`](#-sudo--include_dirs)
+* [`package_ensure`](#-sudo--package_ensure)
 
 ##### <a name="-sudo--user_specifications"></a>`user_specifications`
 
@@ -69,6 +69,25 @@ Example:
 
 Default value: `{}`
 
+##### <a name="-sudo--default_entries"></a>`default_entries`
+
+Data type: `Hash`
+
+A hash of sudo::default_entry resources that can be set in hiera to
+override runtime defaults in the 'Defaults' section of /etc/sudoers
+
+Default value: `{}`
+
+##### <a name="-sudo--aliases"></a>`aliases`
+
+Data type: `Hash`
+
+A hash of sudo::alias resources that can be set in hiera to add
+User_Alias, Runas_Alias, Host_Alias, or Cmnd_Alias entries to
+/etc/sudoers
+
+Default value: `{}`
+
 ##### <a name="-sudo--include_dirs"></a>`include_dirs`
 
 Data type: `Array[Stdlib::Absolutepath]`
@@ -84,22 +103,6 @@ Data type: `String`
 The ensure status of packages to be managed
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
-
-##### <a name="-sudo--default_entries"></a>`default_entries`
-
-Data type: `Hash`
-
-
-
-Default value: `{}`
-
-##### <a name="-sudo--aliases"></a>`aliases`
-
-Data type: `Hash`
-
-
-
-Default value: `{}`
 
 ## Defined types
 
@@ -397,7 +400,7 @@ the directory to include in /etc/sudoers
 
 Data type: `Boolean`
 
-
+Whether to purge files in $include_dir that are not managed by Puppet
 
 Default value: `false`
 

@@ -4,5 +4,3 @@ fixtures:
     concat: https://github.com/simp/puppetlabs-concat.git
     simplib: https://github.com/simp/pupmod-simp-simplib.git
     stdlib: https://github.com/simp/puppetlabs-stdlib.git
-  symlinks:
-    sudo: "#{source_dir}"

@@ -20,6 +20,15 @@
 #         runas: root
 #         passwd: true
 #
+# @param default_entries
+#   A hash of sudo::default_entry resources that can be set in hiera to
+#   override runtime defaults in the 'Defaults' section of /etc/sudoers
+#
+# @param aliases
+#   A hash of sudo::alias resources that can be set in hiera to add
+#   User_Alias, Runas_Alias, Host_Alias, or Cmnd_Alias entries to
+#   /etc/sudoers
+#
 # @param include_dirs an array of paths to include in the sudoers file
 #
 # @param package_ensure The ensure status of packages to be managed
@@ -33,7 +42,6 @@ class sudo (
   String                      $package_ensure      = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
   Array[Stdlib::Absolutepath] $include_dirs        = [],
 ) {
-
   package { 'sudo':
     ensure => $package_ensure
   }
