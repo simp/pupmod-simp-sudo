@@ -516,7 +516,10 @@ the directory to include in /etc/sudoers
 
 Data type: `Boolean`
 
-Whether to purge files in $include_dir that are not managed by Puppet
+Whether to purge files in $include_dir that are not managed by Puppet.
+Only when this is enabled does Puppet recurse into the directory at
+all; otherwise pre-existing unmanaged files are left completely
+untouched (their ownership and permissions are not modified).
 
 Default value: `false`
 

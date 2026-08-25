@@ -3,7 +3,10 @@
 # @param include_dir the directory to include in /etc/sudoers
 #
 # @param tidy_include_dir
-#   Whether to purge files in $include_dir that are not managed by Puppet
+#   Whether to purge files in $include_dir that are not managed by Puppet.
+#   Only when this is enabled does Puppet recurse into the directory at
+#   all; otherwise pre-existing unmanaged files are left completely
+#   untouched (their ownership and permissions are not modified).
 #
 # @param validate
 #   Whether to validate the generated `#includedir` file with a non-strict
@@ -18,13 +21,17 @@ define sudo::include_dir (
   include 'sudo'
   include 'sudo::config_check'
 
+  # 0750 matches the distribution default for /etc/sudoers.d. Recursion is
+  # only enabled when purging: it would otherwise force this mode onto
+  # pre-existing unmanaged files (simp/pupmod-simp-sudo#138). Drop-in files
+  # managed by this module are 0440 via their own resources.
   file { $include_dir:
     ensure  => 'directory',
     owner   => 'root',
     group   => 'root',
-    mode    => '0640',
+    mode    => '0750',
     purge   => $tidy_include_dir,
-    recurse => true,
+    recurse => $tidy_include_dir,
   }
 
   $_filename = sprintf('%04d_includedir_%s', 1000, regsubst($include_dir, '[^0-9A-Za-z_-]', '_', 'G'))

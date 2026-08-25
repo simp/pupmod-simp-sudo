@@ -15,6 +15,11 @@
 - Ship a `simp:defaults` compliance_engine profile that restores the
   pre-refactor defaults; activate with
   `compliance_engine::enforcement: [simp:defaults]`
+- `sudo::include_dir` no longer forces mode 0640 onto the include
+  directory and every file within it (#138); the directory is now managed
+  as 0750 (the distribution default for `/etc/sudoers.d`), managed drop-in
+  files are 0440, and unmanaged files are left untouched unless
+  `tidy_include_dir` purges them
 
 * Mon Aug 24 2026 Steven Pritchard <steve@sicura.us> - 6.0.2
 - [puppetsync] Update metadata.json dependency ranges from the Forge
