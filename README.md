@@ -51,8 +51,11 @@ particular:
     aliases defined in other files (they only produce warnings), so
     entries may still be split across multiple files.
   - Whenever a managed file changes, the complete assembled configuration
-    is checked with a strict `visudo -cs` (`sudo::strict_config_check`;
-    default `true`). This runs after the write, so it cannot prevent an
+    is checked with a strict `visudo -csf /etc/sudoers`
+    (`sudo::strict_config_check`; default `true`). This is a parse-only
+    check — visudo's owner/mode checks are skipped so that pre-existing
+    unmanaged drop-ins with lax permissions do not fail the run. It runs
+    after the write, so it cannot prevent an
     invalid cross-file configuration from landing, but it fails the Puppet
     run so problems like a dangling alias reference are surfaced
     immediately.

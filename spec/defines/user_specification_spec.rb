@@ -30,7 +30,7 @@ describe 'sudo::user_specification' do
             is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
               .that_notifies('Exec[visudo strict configuration check]')
             is_expected.to contain_exec('visudo strict configuration check').with(
-              command: '/usr/sbin/visudo -cs',
+              command: '/usr/sbin/visudo -csf /etc/sudoers',
               refreshonly: true,
             ).that_requires('Package[sudo]')
           end

@@ -8,8 +8,8 @@
   - Dropped the `puppetlabs/concat` dependency; validation now uses `visudo`
     directly: each drop-in file is checked with a non-strict `visudo -cf`
     before install (`sudo::validate`, per-resource `validate`), and any
-    change triggers a strict `visudo -cs` check of the whole configuration
-    (`sudo::strict_config_check`)
+    change triggers a strict parse (`visudo -csf /etc/sudoers`) of the
+    whole configuration (`sudo::strict_config_check`)
   - `sudo::package_ensure` no longer follows `simp_options::package_ensure`
     (defaults to `installed`)
 - Ship a `simp:defaults` compliance_engine profile that restores the
