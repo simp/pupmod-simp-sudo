@@ -26,6 +26,13 @@ describe 'sudo::alias' do
               .with_validate_cmd('/usr/sbin/visudo -cf %')
               .that_notifies('Exec[visudo strict configuration check]')
           }
+          it {
+            is_expected.to contain_file_line("sudo legacy cleanup 0010_#{params[:alias_type]}_alias_#{title} 0").with(
+              ensure: 'absent',
+              path: '/etc/sudoers',
+              line: 'User_Alias USER_ALIAS1 = millert, mikef',
+            )
+          }
         end
 
         context 'with comment specified' do

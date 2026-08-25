@@ -20,6 +20,16 @@
   as 0750 (the distribution default for `/etc/sudoers.d`), managed drop-in
   files are 0440, and unmanaged files are left untouched unless
   `tidy_include_dir` purges them
+- Handle upgrades from 6.x, which owned `/etc/sudoers` outright, with two
+  line-targeted mechanisms that activate only when entries are managed
+  (both enabled by default):
+  - `sudo::manage_includedir` ensures `/etc/sudoers` contains an
+    `#includedir` directive for `sudo::content_dir` (appended only when no
+    equivalent directive exists) so drop-in files are never silently
+    ignored
+  - `sudo::remove_legacy_entries` removes lines from `/etc/sudoers` that
+    are byte-identical to entry content now managed as drop-in files,
+    preventing duplicate-alias parse errors from the stale 6.x content
 
 * Mon Aug 24 2026 Steven Pritchard <steve@sicura.us> - 6.0.2
 - [puppetsync] Update metadata.json dependency ranges from the Forge

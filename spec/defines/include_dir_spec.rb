@@ -36,6 +36,12 @@ describe 'sudo::include_dir' do
               .with_validate_cmd('/usr/sbin/visudo -cf %')
               .that_notifies('Exec[visudo strict configuration check]')
           end
+
+          # The bootstrap directive comes via sudo::includedir, but no
+          # legacy cleanup: the 6.x-written includedir line in /etc/sudoers
+          # may be the directive keeping the drop-ins active.
+          it { is_expected.to contain_file_line('sudo content_dir includedir') }
+          it { is_expected.not_to contain_file_line('sudo legacy cleanup 1000_includedir__etc_sudoers_d 0') }
         end
 
         context 'with tidy_include_dir => true' do

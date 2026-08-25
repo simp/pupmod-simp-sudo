@@ -55,6 +55,7 @@ define sudo::default_entry (
 ) {
   include 'sudo'
   include 'sudo::config_check'
+  include 'sudo::includedir'
 
   #  Check if this version is susceptable to cve_2019_14287
   if ( $def_type != 'runas' ) or ( $facts['sudo_version'] and ( versioncmp($facts['sudo_version'], '1.8.28' )  >= 0 )) {
@@ -70,24 +71,44 @@ define sudo::default_entry (
     default => undef,
   }
 
+  $_file_content = epp(
+    "${module_name}/defaults.epp",
+    {
+      'content'  => $_content,
+      'target'   => $target,
+      'def_type' => $def_type,
+    },
+  )
+
   file { "${sudo::content_dir}/${_filename}":
     ensure       => 'file',
     owner        => 'root',
     group        => 'root',
     mode         => '0440',
-    content      => epp(
-      "${module_name}/defaults.epp",
-      {
-        'content'  => $_content,
-        'target'   => $target,
-        'def_type' => $def_type,
-      },
-    ),
+    content      => $_file_content,
     validate_cmd => $_validate_cmd,
     require      => Package['sudo'],
   }
 
   if $sudo::strict_config_check {
     File["${sudo::content_dir}/${_filename}"] ~> Exec['visudo strict configuration check']
+  }
+
+  # sudo module 6.x wrote this same template output directly into
+  # /etc/sudoers; remove any byte-identical stale lines so the drop-in
+  # file is the single source of truth.
+  if $sudo::remove_legacy_entries {
+    $_file_content.split("\n").filter |$line| { $line =~ /\S/ }.each |$index, $line| {
+      file_line { "sudo legacy cleanup ${_filename} ${index}":
+        ensure  => absent,
+        path    => '/etc/sudoers',
+        line    => $line,
+        require => Package['sudo'],
+      }
+
+      if $sudo::strict_config_check {
+        File_line["sudo legacy cleanup ${_filename} ${index}"] ~> Exec['visudo strict configuration check']
+      }
+    }
   }
 }

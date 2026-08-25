@@ -34,6 +34,38 @@ describe 'sudo::user_specification' do
               refreshonly: true,
             ).that_requires('Package[sudo]')
           end
+
+          it 'ensures /etc/sudoers reads the content directory' do
+            is_expected.to contain_file_line('sudo content_dir includedir').with(
+              path: '/etc/sudoers',
+              line: '#includedir /etc/sudoers.d',
+              match: '^[@#]includedir[ \t]+/etc/sudoers\.d[ \t]*$',
+              replace: false,
+            ).that_notifies('Exec[visudo strict configuration check]')
+          end
+
+          it 'removes the byte-identical legacy line from /etc/sudoers' do
+            is_expected.to contain_file_line("sudo legacy cleanup 0090_uspec_#{title} 0").with(
+              ensure: 'absent',
+              path: '/etc/sudoers',
+              line: "joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root)  PASSWD:EXEC:SETENV: ifconfig",
+            ).that_notifies('Exec[visudo strict configuration check]')
+          end
+        end
+
+        context 'with upgrade handling disabled' do
+          let(:hieradata) { 'sudo__no_upgrade_handling' }
+          let(:params) do
+            {
+              user_list: ['joe'],
+              cmnd: ['ifconfig'],
+            }
+          end
+
+          it 'declares no file_line resources' do
+            file_lines = catalogue.resources.select { |r| r.type == 'File_line' }
+            expect(file_lines).to be_empty
+          end
         end
 
         context 'with validate => false' do

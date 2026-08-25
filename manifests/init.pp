@@ -48,6 +48,29 @@
 #   warnings), so entries may still be split across multiple files. Can be
 #   overridden per resource via the defines' `validate` parameter.
 #
+# @param manage_includedir
+#   Whether to ensure `/etc/sudoers` contains an `#includedir` directive
+#   for `$content_dir` whenever this module manages at least one entry.
+#   The line is only appended (via `file_line`) when no equivalent
+#   `#includedir`/`@includedir` directive is already present, and never on
+#   a bare `include sudo`. This matters on systems upgraded from version
+#   6.x of this module, where the previously concat-managed `/etc/sudoers`
+#   may lack the OS-shipped directive — without it, the drop-in files
+#   under `$content_dir` are silently ignored by sudo. If you disable
+#   this, you are responsible for ensuring the directive exists by other
+#   means; a warning is logged whenever entries are managed with this
+#   disabled.
+#
+# @param remove_legacy_entries
+#   Whether to remove lines from `/etc/sudoers` that are byte-identical to
+#   entry content this module now writes as drop-in files under
+#   `$content_dir`. Version 6.x of this module wrote entries directly into
+#   `/etc/sudoers` using the same templates, so after an upgrade those
+#   stale lines duplicate the drop-in content — and duplicate alias
+#   definitions are a sudoers parse error. Only exact duplicates of
+#   currently-managed content are removed; nothing else in `/etc/sudoers`
+#   is touched.
+#
 # @param strict_config_check
 #   Whether a change to any managed drop-in file should trigger a strict
 #   check (`visudo -cs`) of the complete assembled sudo configuration. This
@@ -67,8 +90,10 @@ class sudo (
   String[1]                   $package_ensure      = 'installed',
   Array[Stdlib::Absolutepath] $include_dirs        = [],
   Stdlib::Absolutepath        $content_dir         = '/etc/sudoers.d',
-  Boolean                     $validate            = true,
-  Boolean                     $strict_config_check = true,
+  Boolean                     $validate              = true,
+  Boolean                     $strict_config_check   = true,
+  Boolean                     $manage_includedir     = true,
+  Boolean                     $remove_legacy_entries = true,
 ) {
   package { 'sudo':
     ensure => $package_ensure

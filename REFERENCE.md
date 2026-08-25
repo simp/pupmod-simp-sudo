@@ -13,6 +13,7 @@
 #### Private Classes
 
 * `sudo::config_check`: Declares the strict whole-configuration check (`visudo -cs`) that managed sudoers drop-in files notify when they change. Included by this mod
+* `sudo::includedir`: Ensures `/etc/sudoers` actually reads this module's drop-in files: appends an `#includedir` directive for `sudo::content_dir` unless an equiv
 
 ### Defined types
 
@@ -52,6 +53,8 @@ The following parameters are available in the `sudo` class:
 * [`package_ensure`](#-sudo--package_ensure)
 * [`content_dir`](#-sudo--content_dir)
 * [`validate`](#-sudo--validate)
+* [`manage_includedir`](#-sudo--manage_includedir)
+* [`remove_legacy_entries`](#-sudo--remove_legacy_entries)
 * [`strict_config_check`](#-sudo--strict_config_check)
 
 ##### <a name="-sudo--user_specifications"></a>`user_specifications`
@@ -135,6 +138,39 @@ genuine syntax errors and unknown Defaults options, but tolerates
 references to aliases defined in other files (they only produce
 warnings), so entries may still be split across multiple files. Can be
 overridden per resource via the defines' `validate` parameter.
+
+Default value: `true`
+
+##### <a name="-sudo--manage_includedir"></a>`manage_includedir`
+
+Data type: `Boolean`
+
+Whether to ensure `/etc/sudoers` contains an `#includedir` directive
+for `$content_dir` whenever this module manages at least one entry.
+The line is only appended (via `file_line`) when no equivalent
+`#includedir`/`@includedir` directive is already present, and never on
+a bare `include sudo`. This matters on systems upgraded from version
+6.x of this module, where the previously concat-managed `/etc/sudoers`
+may lack the OS-shipped directive — without it, the drop-in files
+under `$content_dir` are silently ignored by sudo. If you disable
+this, you are responsible for ensuring the directive exists by other
+means; a warning is logged whenever entries are managed with this
+disabled.
+
+Default value: `true`
+
+##### <a name="-sudo--remove_legacy_entries"></a>`remove_legacy_entries`
+
+Data type: `Boolean`
+
+Whether to remove lines from `/etc/sudoers` that are byte-identical to
+entry content this module now writes as drop-in files under
+`$content_dir`. Version 6.x of this module wrote entries directly into
+`/etc/sudoers` using the same templates, so after an upgrade those
+stale lines duplicate the drop-in content — and duplicate alias
+definitions are a sudoers parse error. Only exact duplicates of
+currently-managed content are removed; nothing else in `/etc/sudoers`
+is touched.
 
 Default value: `true`
 

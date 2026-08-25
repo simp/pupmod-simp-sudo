@@ -20,6 +20,12 @@ define sudo::include_dir (
 ) {
   include 'sudo'
   include 'sudo::config_check'
+  include 'sudo::includedir'
+
+  # Unlike the entry defines, no legacy-line cleanup happens here: the
+  # `#includedir` line 6.x wrote into /etc/sudoers may be the very
+  # directive that keeps this module's drop-in files active (and would
+  # conflict with the line sudo::includedir ensures present).
 
   # 0750 matches the distribution default for /etc/sudoers.d. Recursion is
   # only enabled when purging: it would otherwise force this mode onto

@@ -30,11 +30,15 @@ Version 7.0.0 reduces the "blast radius" of this module. **A bare
 `include sudo` now installs the `sudo` package and does nothing else.** In
 particular:
 
-- The module **no longer manages `/etc/sudoers`**. Previously a bare
-  `include sudo` declared a `concat` resource for `/etc/sudoers`, which took
-  whole-file ownership of that shared file and, with no entries configured,
-  *blanked* it (wiping the OS-shipped `Defaults` and `#includedir`). The OS
-  `/etc/sudoers` is now left untouched.
+- The module **no longer takes ownership of `/etc/sudoers`**. Previously a
+  bare `include sudo` declared a `concat` resource for `/etc/sudoers`,
+  which took whole-file ownership of that shared file and, with no entries
+  configured, *blanked* it (wiping the OS-shipped `Defaults` and
+  `#includedir`). A bare `include sudo` now leaves `/etc/sudoers`
+  completely untouched. When the module manages at least one entry, the
+  only writes it ever makes to `/etc/sudoers` are the two minimal,
+  line-targeted upgrade aids described under
+  [Upgrading from 6.x](#upgrading-from-6x) (both can be disabled).
 - All managed entries (`sudo::alias`, `sudo::default_entry`,
   `sudo::user_specification`, and the `#includedir` lines from
   `sudo::include_dir`) are now written as **individual files under
@@ -80,6 +84,40 @@ particular:
    > **Note:** the profile restores parameter *values* only. The former
    > whole-file management of `/etc/sudoers` was structurally removed (there
    > is no parameter for it) and is intentionally **not** restorable.
+
+### Upgrading from 6.x
+
+Version 6.x owned `/etc/sudoers` outright, so a system upgraded to 7.0.0
+starts out with a stale, module-generated `/etc/sudoers` that this version
+will never rewrite. Left alone, that file causes two problems: if it lacks
+an `#includedir` directive for `/etc/sudoers.d` (6.x only wrote one when
+`sudo::include_dirs` was set), the new drop-in files are **silently
+ignored** by sudo; and where it does contain the old entries, they
+duplicate the drop-in content — a duplicate alias definition is a sudoers
+parse error. Two line-targeted mechanisms, both enabled by default, handle
+this:
+
+- **`sudo::manage_includedir`** (default `true`) — whenever this module
+  manages at least one entry, it ensures `/etc/sudoers` contains an
+  `#includedir` directive for `sudo::content_dir`. The line is appended
+  with `file_line` **only if** no equivalent `#includedir`/`@includedir`
+  directive is already present; an existing directive is never modified.
+  If you disable this, you are responsible for ensuring the directive
+  exists by other means — the module logs a warning whenever entries are
+  managed with this disabled, because without the directive they are
+  inert.
+- **`sudo::remove_legacy_entries`** (default `true`) — removes lines from
+  `/etc/sudoers` that are **byte-identical** to entry content this module
+  now writes as drop-in files (6.x wrote the same template output directly
+  into `/etc/sudoers`). Nothing else in the file is touched. `#includedir`
+  lines are deliberately excluded from cleanup, since the 6.x-written one
+  may be the directive keeping the drop-ins active.
+
+Both mechanisms activate only when the module actually manages entries — a
+bare `include sudo` still touches nothing. Note that the OS-shipped
+`/etc/sudoers` content that 6.x wiped (`Defaults` such as `secure_path`,
+`env_reset`, and `requiretty`) is **not** restored; recover it from
+`/etc/sudoers.rpmnew` or the `sudo` package if your site needs it.
 
 ### What sudo affects
 

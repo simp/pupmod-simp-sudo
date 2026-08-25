@@ -25,10 +25,17 @@ describe 'sudo' do
             expect(files).to be_empty
           end
 
-          # The strict whole-config check only enters the catalog via the
-          # defines (through sudo::config_check).
+          # The strict whole-config check, the includedir bootstrap, and
+          # the legacy-line cleanup only enter the catalog via the defines
+          # (through sudo::config_check and sudo::includedir).
           it { is_expected.not_to contain_class('sudo::config_check') }
+          it { is_expected.not_to contain_class('sudo::includedir') }
           it { is_expected.not_to contain_exec('visudo strict configuration check') }
+
+          it 'declares no file_line resources' do
+            file_lines = catalogue.resources.select { |r| r.type == 'File_line' }
+            expect(file_lines).to be_empty
+          end
         end
 
         context 'should create sudo::user_specification resources with an iterator' do
