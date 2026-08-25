@@ -42,11 +42,20 @@ particular:
   which sudo reads via its default `#includedir`. File names carry a
   numeric prefix so the previous relative ordering (aliases, then defaults,
   then user specifications) is preserved.
-- The **`puppetlabs/concat` dependency has been removed.** As a consequence,
-  sudoers content is **no longer validated with `visudo`** before being
-  written. A `sudo::user_specification` may reference a `User_Alias` or
-  `Cmnd_Alias` defined in a separate file, and such cross-file references
-  cannot be validated in isolation, so per-file validation was dropped.
+- The **`puppetlabs/concat` dependency has been removed.** Validation is
+  now performed with `visudo` directly, in two layers:
+  - Each drop-in file is validated with a non-strict `visudo -cf` *before*
+    it is installed (`sudo::validate`, or the per-resource `validate`
+    parameter; default `true`). Non-strict validation rejects genuine
+    syntax errors and unknown Defaults options but tolerates references to
+    aliases defined in other files (they only produce warnings), so
+    entries may still be split across multiple files.
+  - Whenever a managed file changes, the complete assembled configuration
+    is checked with a strict `visudo -cs` (`sudo::strict_config_check`;
+    default `true`). This runs after the write, so it cannot prevent an
+    invalid cross-file configuration from landing, but it fails the Puppet
+    run so problems like a dangling alias reference are surfaced
+    immediately.
 - `sudo::package_ensure` no longer follows `simp_options::package_ensure`;
   it defaults to `installed`.
 

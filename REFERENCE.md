@@ -6,7 +6,13 @@
 
 ### Classes
 
+#### Public Classes
+
 * [`sudo`](#sudo): Constructs a sudoers file based on configured aliases, defaults, and user specifications.
+
+#### Private Classes
+
+* `sudo::config_check`: Declares the strict whole-configuration check (`visudo -cs`) that managed sudoers drop-in files notify when they change. Included by this mod
 
 ### Defined types
 
@@ -45,6 +51,8 @@ The following parameters are available in the `sudo` class:
 * [`include_dirs`](#-sudo--include_dirs)
 * [`package_ensure`](#-sudo--package_ensure)
 * [`content_dir`](#-sudo--content_dir)
+* [`validate`](#-sudo--validate)
+* [`strict_config_check`](#-sudo--strict_config_check)
 
 ##### <a name="-sudo--user_specifications"></a>`user_specifications`
 
@@ -117,6 +125,34 @@ module.
 
 Default value: `'/etc/sudoers.d'`
 
+##### <a name="-sudo--validate"></a>`validate`
+
+Data type: `Boolean`
+
+Whether to validate each managed drop-in file with a non-strict
+`visudo -cf` before it is installed. Non-strict validation rejects
+genuine syntax errors and unknown Defaults options, but tolerates
+references to aliases defined in other files (they only produce
+warnings), so entries may still be split across multiple files. Can be
+overridden per resource via the defines' `validate` parameter.
+
+Default value: `true`
+
+##### <a name="-sudo--strict_config_check"></a>`strict_config_check`
+
+Data type: `Boolean`
+
+Whether a change to any managed drop-in file should trigger a strict
+check (`visudo -cs`) of the complete assembled sudo configuration. This
+runs after the files are written, so it cannot prevent an invalid
+configuration from landing, but it catches cross-file problems that
+per-file validation cannot see (such as removing an alias that a user
+specification in another file still references) and fails the Puppet
+run so the problem is visible. Disable this if your site intentionally
+carries unresolved alias references.
+
+Default value: `true`
+
 ## Defined types
 
 ### <a name="sudo--alias"></a>`sudo::alias`
@@ -146,6 +182,7 @@ The following parameters are available in the `sudo::alias` defined type:
 * [`alias_type`](#-sudo--alias--alias_type)
 * [`comment`](#-sudo--alias--comment)
 * [`order`](#-sudo--alias--order)
+* [`validate`](#-sudo--alias--validate)
 
 ##### <a name="-sudo--alias--content"></a>`content`
 
@@ -177,6 +214,16 @@ Usually not required.
 
 Default value: `10`
 
+##### <a name="-sudo--alias--validate"></a>`validate`
+
+Data type: `Optional[Boolean]`
+
+Whether to validate this file with a non-strict `visudo -cf` before it
+is installed. Overrides the module-wide `sudo::validate` setting for
+this resource.
+
+Default value: `undef`
+
 ### <a name="sudo--alias--cmnd"></a>`sudo::alias::cmnd`
 
 Convenience definition for adding a cmnd alias.
@@ -188,6 +235,7 @@ The following parameters are available in the `sudo::alias::cmnd` defined type:
 * [`content`](#-sudo--alias--cmnd--content)
 * [`comment`](#-sudo--alias--cmnd--comment)
 * [`order`](#-sudo--alias--cmnd--order)
+* [`validate`](#-sudo--alias--cmnd--validate)
 
 ##### <a name="-sudo--alias--cmnd--content"></a>`content`
 
@@ -213,6 +261,16 @@ Usually not required.
 
 Default value: `10`
 
+##### <a name="-sudo--alias--cmnd--validate"></a>`validate`
+
+Data type: `Optional[Boolean]`
+
+Whether to validate this file with a non-strict `visudo -cf` before it
+is installed. Overrides the module-wide `sudo::validate` setting for
+this resource.
+
+Default value: `undef`
+
 ### <a name="sudo--alias--host"></a>`sudo::alias::host`
 
 Convenience definition for adding a host alias.
@@ -224,6 +282,7 @@ The following parameters are available in the `sudo::alias::host` defined type:
 * [`content`](#-sudo--alias--host--content)
 * [`comment`](#-sudo--alias--host--comment)
 * [`order`](#-sudo--alias--host--order)
+* [`validate`](#-sudo--alias--host--validate)
 
 ##### <a name="-sudo--alias--host--content"></a>`content`
 
@@ -250,6 +309,16 @@ Usually not required.
 
 Default value: `12`
 
+##### <a name="-sudo--alias--host--validate"></a>`validate`
+
+Data type: `Optional[Boolean]`
+
+Whether to validate this file with a non-strict `visudo -cf` before it
+is installed. Overrides the module-wide `sudo::validate` setting for
+this resource.
+
+Default value: `undef`
+
 ### <a name="sudo--alias--runas"></a>`sudo::alias::runas`
 
 Convenience definition for adding a runas alias.
@@ -261,6 +330,7 @@ The following parameters are available in the `sudo::alias::runas` defined type:
 * [`content`](#-sudo--alias--runas--content)
 * [`comment`](#-sudo--alias--runas--comment)
 * [`order`](#-sudo--alias--runas--order)
+* [`validate`](#-sudo--alias--runas--validate)
 
 ##### <a name="-sudo--alias--runas--content"></a>`content`
 
@@ -286,6 +356,16 @@ Usually not required.
 
 Default value: `14`
 
+##### <a name="-sudo--alias--runas--validate"></a>`validate`
+
+Data type: `Optional[Boolean]`
+
+Whether to validate this file with a non-strict `visudo -cf` before it
+is installed. Overrides the module-wide `sudo::validate` setting for
+this resource.
+
+Default value: `undef`
+
 ### <a name="sudo--alias--user"></a>`sudo::alias::user`
 
 Convenience definition for adding a user alias.
@@ -297,6 +377,7 @@ The following parameters are available in the `sudo::alias::user` defined type:
 * [`content`](#-sudo--alias--user--content)
 * [`comment`](#-sudo--alias--user--comment)
 * [`order`](#-sudo--alias--user--order)
+* [`validate`](#-sudo--alias--user--validate)
 
 ##### <a name="-sudo--alias--user--content"></a>`content`
 
@@ -321,6 +402,16 @@ If desired, force the order of this entry relative to other entries.
 Usually not required.
 
 Default value: `16`
+
+##### <a name="-sudo--alias--user--validate"></a>`validate`
+
+Data type: `Optional[Boolean]`
+
+Whether to validate this file with a non-strict `visudo -cf` before it
+is installed. Overrides the module-wide `sudo::validate` setting for
+this resource.
+
+Default value: `undef`
 
 ### <a name="sudo--default_entry"></a>`sudo::default_entry`
 
@@ -363,6 +454,7 @@ The following parameters are available in the `sudo::default_entry` defined type
 * [`content`](#-sudo--default_entry--content)
 * [`target`](#-sudo--default_entry--target)
 * [`def_type`](#-sudo--default_entry--def_type)
+* [`validate`](#-sudo--default_entry--validate)
 
 ##### <a name="-sudo--default_entry--content"></a>`content`
 
@@ -392,6 +484,16 @@ May be one of:
 
 Default value: `'base'`
 
+##### <a name="-sudo--default_entry--validate"></a>`validate`
+
+Data type: `Optional[Boolean]`
+
+Whether to validate this file with a non-strict `visudo -cf` before it
+is installed. Overrides the module-wide `sudo::validate` setting for
+this resource.
+
+Default value: `undef`
+
 ### <a name="sudo--include_dir"></a>`sudo::include_dir`
 
 Add include directories to /etc/sudoers
@@ -402,6 +504,7 @@ The following parameters are available in the `sudo::include_dir` defined type:
 
 * [`include_dir`](#-sudo--include_dir--include_dir)
 * [`tidy_include_dir`](#-sudo--include_dir--tidy_include_dir)
+* [`validate`](#-sudo--include_dir--validate)
 
 ##### <a name="-sudo--include_dir--include_dir"></a>`include_dir`
 
@@ -416,6 +519,16 @@ Data type: `Boolean`
 Whether to purge files in $include_dir that are not managed by Puppet
 
 Default value: `false`
+
+##### <a name="-sudo--include_dir--validate"></a>`validate`
+
+Data type: `Optional[Boolean]`
+
+Whether to validate the generated `#includedir` file with a non-strict
+`visudo -cf` before it is installed. Overrides the module-wide
+`sudo::validate` setting for this resource.
+
+Default value: `undef`
 
 ### <a name="sudo--user_specification"></a>`sudo::user_specification`
 
@@ -450,6 +563,7 @@ The following parameters are available in the `sudo::user_specification` defined
 * [`doexec`](#-sudo--user_specification--doexec)
 * [`setenv`](#-sudo--user_specification--setenv)
 * [`options`](#-sudo--user_specification--options)
+* [`validate`](#-sudo--user_specification--validate)
 
 ##### <a name="-sudo--user_specification--user_list"></a>`user_list`
 
@@ -512,6 +626,16 @@ Data type: `Hash`
 Set additional options (such as SELinux role or type, date restrictions, or timeout)
 
 Default value: `{}`
+
+##### <a name="-sudo--user_specification--validate"></a>`validate`
+
+Data type: `Optional[Boolean]`
+
+Whether to validate this file with a non-strict `visudo -cf` before it
+is installed. Overrides the module-wide `sudo::validate` setting for
+this resource.
+
+Default value: `undef`
 
 ## Functions
 

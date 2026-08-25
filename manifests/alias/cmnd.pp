@@ -14,17 +14,24 @@
 #   If desired, force the order of this entry relative to other entries.
 #   Usually not required.
 #
+# @param validate
+#   Whether to validate this file with a non-strict `visudo -cf` before it
+#   is installed. Overrides the module-wide `sudo::validate` setting for
+#   this resource.
+#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 define sudo::alias::cmnd (
   Array[String[1]]    $content,
   Optional[String[1]] $comment  = undef,
-  Integer             $order    = 10
+  Integer             $order    = 10,
+  Optional[Boolean]   $validate = undef,
 ) {
   sudo::alias { $name:
     content    => $content,
     order      => $order,
     comment    => $comment,
+    validate   => $validate,
     alias_type => 'cmnd'
   }
 }

@@ -29,6 +29,11 @@
 # @param options
 #   Set additional options (such as SELinux role or type, date restrictions, or timeout)
 #
+# @param validate
+#   Whether to validate this file with a non-strict `visudo -cf` before it
+#   is installed. Overrides the module-wide `sudo::validate` setting for
+#   this resource.
+#
 # @example To create the following in /etc/sudoers:
 #   `simp, %simp_group    user2-dev1=(root) PASSWD:EXEC:SETENV: /bin/su root, /bin/su - root`
 #   Use the user_specification definition:
@@ -49,8 +54,10 @@ define sudo::user_specification (
   Boolean                             $doexec     = true,
   Boolean                             $setenv     = true,
   Hash                                $options    = {},
+  Optional[Boolean]                   $validate   = undef,
 ) {
   include 'sudo'
+  include 'sudo::config_check'
 
   #  Check if this version is susceptable to cve_2019_14287
   if $facts['sudo_version'] and ( versioncmp($facts['sudo_version'], '1.8.28')  >= 0 ) {
@@ -61,12 +68,17 @@ define sudo::user_specification (
 
   $_filename = sprintf('%04d_uspec_%s', 90, regsubst($name, '[^0-9A-Za-z_-]', '_', 'G'))
 
+  $_validate_cmd = pick($validate, $sudo::validate) ? {
+    true    => '/usr/sbin/visudo -cf %',
+    default => undef,
+  }
+
   file { "${sudo::content_dir}/${_filename}":
-    ensure  => 'file',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0440',
-    content => epp(
+    ensure       => 'file',
+    owner        => 'root',
+    group        => 'root',
+    mode         => '0440',
+    content      => epp(
       "${module_name}/uspec.epp",
       {
         'user_list' => $user_list,
@@ -79,6 +91,11 @@ define sudo::user_specification (
         'options'   => $options,
       },
     ),
-    require => Package['sudo'],
+    validate_cmd => $_validate_cmd,
+    require      => Package['sudo'],
+  }
+
+  if $sudo::strict_config_check {
+    File["${sudo::content_dir}/${_filename}"] ~> Exec['visudo strict configuration check']
   }
 }

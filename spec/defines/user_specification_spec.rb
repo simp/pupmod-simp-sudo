@@ -20,6 +20,60 @@ describe 'sudo::user_specification' do
             is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
               .with_content("joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root)  PASSWD:EXEC:SETENV: ifconfig\n")
           end
+
+          it 'validates the file with visudo before install' do
+            is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
+              .with_validate_cmd('/usr/sbin/visudo -cf %')
+          end
+
+          it 'notifies the strict whole-config check' do
+            is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
+              .that_notifies('Exec[visudo strict configuration check]')
+            is_expected.to contain_exec('visudo strict configuration check').with(
+              command: '/usr/sbin/visudo -cs',
+              refreshonly: true,
+            ).that_requires('Package[sudo]')
+          end
+        end
+
+        context 'with validate => false' do
+          let(:params) do
+            {
+              user_list: ['joe'],
+              cmnd: ['ifconfig'],
+              validate: false,
+            }
+          end
+
+          it do
+            is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
+              .without_validate_cmd
+          end
+        end
+
+        context 'with validation disabled module-wide' do
+          let(:hieradata) { 'sudo__no_validation' }
+          let(:params) do
+            {
+              user_list: ['joe'],
+              cmnd: ['ifconfig'],
+            }
+          end
+
+          it do
+            is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
+              .without_validate_cmd
+          end
+          it { is_expected.not_to contain_exec('visudo strict configuration check') }
+
+          context 'with validate => true overriding sudo::validate' do
+            let(:params) { super().merge(validate: true) }
+
+            it do
+              is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
+                .with_validate_cmd('/usr/sbin/visudo -cf %')
+            end
+          end
         end
 
         context 'passwd, doexec, and setenv all false' do

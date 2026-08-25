@@ -16,6 +16,11 @@ describe 'sudo::default_entry' do
             is_expected.to create_file("/etc/sudoers.d/0080_default_#{title}")
               .with_content("Defaults    first, second\n")
           end
+          it do
+            is_expected.to create_file("/etc/sudoers.d/0080_default_#{title}")
+              .with_validate_cmd('/usr/sbin/visudo -cf %')
+              .that_notifies('Exec[visudo strict configuration check]')
+          end
         end
 
         context 'def_type = host and target specified' do

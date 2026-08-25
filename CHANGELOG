@@ -5,9 +5,11 @@
   - Managed aliases, defaults, user specifications, and `#includedir` lines
     are now written as individual drop-in files under `/etc/sudoers.d/`
     (configurable via the new `sudo::content_dir` parameter)
-  - Dropped the `puppetlabs/concat` dependency; sudoers content is no longer
-    validated with `visudo` (cross-file alias references cannot be validated
-    in isolation)
+  - Dropped the `puppetlabs/concat` dependency; validation now uses `visudo`
+    directly: each drop-in file is checked with a non-strict `visudo -cf`
+    before install (`sudo::validate`, per-resource `validate`), and any
+    change triggers a strict `visudo -cs` check of the whole configuration
+    (`sudo::strict_config_check`)
   - `sudo::package_ensure` no longer follows `simp_options::package_ensure`
     (defaults to `installed`)
 - Ship a `simp:defaults` compliance_engine profile that restores the

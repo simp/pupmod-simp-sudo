@@ -26,6 +26,12 @@ describe 'sudo::include_dir' do
             is_expected.to create_file('/etc/sudoers.d/1000_includedir__etc_sudoers_d')
               .with_content("#includedir /etc/sudoers.d\n")
           end
+
+          it do
+            is_expected.to create_file('/etc/sudoers.d/1000_includedir__etc_sudoers_d')
+              .with_validate_cmd('/usr/sbin/visudo -cf %')
+              .that_notifies('Exec[visudo strict configuration check]')
+          end
         end
       end
     end

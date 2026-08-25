@@ -21,6 +21,11 @@ describe 'sudo::alias' do
               "User_Alias USER_ALIAS1 = millert, mikef\n",
             )
           }
+          it {
+            is_expected.to contain_file("/etc/sudoers.d/0010_#{params[:alias_type]}_alias_#{title}")
+              .with_validate_cmd('/usr/sbin/visudo -cf %')
+              .that_notifies('Exec[visudo strict configuration check]')
+          }
         end
 
         context 'with comment specified' do

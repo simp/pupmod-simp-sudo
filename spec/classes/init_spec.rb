@@ -24,6 +24,11 @@ describe 'sudo' do
             end
             expect(files).to be_empty
           end
+
+          # The strict whole-config check only enters the catalog via the
+          # defines (through sudo::config_check).
+          it { is_expected.not_to contain_class('sudo::config_check') }
+          it { is_expected.not_to contain_exec('visudo strict configuration check') }
         end
 
         context 'should create sudo::user_specification resources with an iterator' do

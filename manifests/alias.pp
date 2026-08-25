@@ -15,6 +15,11 @@
 #  If desired, force the order of this entry relative to other entries.
 #  Usually not required.
 #
+# @param validate
+#  Whether to validate this file with a non-strict `visudo -cf` before it
+#  is installed. Overrides the module-wide `sudo::validate` setting for
+#  this resource.
+#
 # @example To create the following alias in sudoers:
 #     User_Alias FULLTIMERS = millert, mikef, dowdy
 #   Use the alias definition:
@@ -30,8 +35,10 @@ define sudo::alias (
   Sudo::AliasType     $alias_type,
   Optional[String[1]] $comment     = undef,
   Integer             $order       = 10,
+  Optional[Boolean]   $validate    = undef,
 ) {
   include 'sudo'
+  include 'sudo::config_check'
 
   #  Check if this version is susceptable to cve_2019_14287
   if ($alias_type != 'runas' ) or ( $facts['sudo_version'] and versioncmp($facts['sudo_version'], '1.8.28' ) >= 0 ) {
@@ -42,12 +49,17 @@ define sudo::alias (
 
   $_filename = sprintf('%04d_%s_alias_%s', $order, $alias_type, regsubst($name, '[^0-9A-Za-z_-]', '_', 'G'))
 
+  $_validate_cmd = pick($validate, $sudo::validate) ? {
+    true    => '/usr/sbin/visudo -cf %',
+    default => undef,
+  }
+
   file { "${sudo::content_dir}/${_filename}":
-    ensure  => 'file',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0440',
-    content => epp(
+    ensure       => 'file',
+    owner        => 'root',
+    group        => 'root',
+    mode         => '0440',
+    content      => epp(
       "${module_name}/alias.epp",
       {
         'content'    => $_content,
@@ -56,6 +68,11 @@ define sudo::alias (
         'name'       => $name,
       },
     ),
-    require => Package['sudo'],
+    validate_cmd => $_validate_cmd,
+    require      => Package['sudo'],
+  }
+
+  if $sudo::strict_config_check {
+    File["${sudo::content_dir}/${_filename}"] ~> Exec['visudo strict configuration check']
   }
 }

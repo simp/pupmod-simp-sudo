@@ -17,6 +17,11 @@
 #   - user => User Entry
 #   - runas => Runas Entry
 #
+# @param validate
+#   Whether to validate this file with a non-strict `visudo -cf` before it
+#   is installed. Overrides the module-wide `sudo::validate` setting for
+#   this resource.
+#
 # @example To create the following defaults line in sudoers:
 #   Defaults    requiretty, syslog=authpriv, !root_sudo, !umask, env_reset, env_keep = "COLORS DISPLAY HOSTNAME HISTSIZE INPUTRC KDEDIR \
 #                        LS_COLORS MAIL PS1 PS2 QTDIR USERNAME \
@@ -46,8 +51,10 @@ define sudo::default_entry (
   Array[String[1]]    $content,
   Optional[String[1]] $target   = undef,
   Sudo::DefType       $def_type = 'base',
+  Optional[Boolean]   $validate = undef,
 ) {
   include 'sudo'
+  include 'sudo::config_check'
 
   #  Check if this version is susceptable to cve_2019_14287
   if ( $def_type != 'runas' ) or ( $facts['sudo_version'] and ( versioncmp($facts['sudo_version'], '1.8.28' )  >= 0 )) {
@@ -58,12 +65,17 @@ define sudo::default_entry (
 
   $_filename = sprintf('%04d_default_%s', 80, regsubst($name, '[^0-9A-Za-z_-]', '_', 'G'))
 
+  $_validate_cmd = pick($validate, $sudo::validate) ? {
+    true    => '/usr/sbin/visudo -cf %',
+    default => undef,
+  }
+
   file { "${sudo::content_dir}/${_filename}":
-    ensure  => 'file',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0440',
-    content => epp(
+    ensure       => 'file',
+    owner        => 'root',
+    group        => 'root',
+    mode         => '0440',
+    content      => epp(
       "${module_name}/defaults.epp",
       {
         'content'  => $_content,
@@ -71,6 +83,11 @@ define sudo::default_entry (
         'def_type' => $def_type,
       },
     ),
-    require => Package['sudo'],
+    validate_cmd => $_validate_cmd,
+    require      => Package['sudo'],
+  }
+
+  if $sudo::strict_config_check {
+    File["${sudo::content_dir}/${_filename}"] ~> Exec['visudo strict configuration check']
   }
 }

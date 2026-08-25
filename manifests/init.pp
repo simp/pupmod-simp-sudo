@@ -40,6 +40,24 @@
 #   its own file here, so the shared `/etc/sudoers` is never owned by this
 #   module.
 #
+# @param validate
+#   Whether to validate each managed drop-in file with a non-strict
+#   `visudo -cf` before it is installed. Non-strict validation rejects
+#   genuine syntax errors and unknown Defaults options, but tolerates
+#   references to aliases defined in other files (they only produce
+#   warnings), so entries may still be split across multiple files. Can be
+#   overridden per resource via the defines' `validate` parameter.
+#
+# @param strict_config_check
+#   Whether a change to any managed drop-in file should trigger a strict
+#   check (`visudo -cs`) of the complete assembled sudo configuration. This
+#   runs after the files are written, so it cannot prevent an invalid
+#   configuration from landing, but it catches cross-file problems that
+#   per-file validation cannot see (such as removing an alias that a user
+#   specification in another file still references) and fails the Puppet
+#   run so the problem is visible. Disable this if your site intentionally
+#   carries unresolved alias references.
+#
 # @author https://github.com/simp/pupmod-simp-sudo/graphs/contributors
 #
 class sudo (
@@ -49,6 +67,8 @@ class sudo (
   String[1]                   $package_ensure      = 'installed',
   Array[Stdlib::Absolutepath] $include_dirs        = [],
   Stdlib::Absolutepath        $content_dir         = '/etc/sudoers.d',
+  Boolean                     $validate            = true,
+  Boolean                     $strict_config_check = true,
 ) {
   package { 'sudo':
     ensure => $package_ensure
