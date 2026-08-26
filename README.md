@@ -155,6 +155,13 @@ this:
   release, after which any remaining 6.x remnants must be cleaned up by
   hand (or by re-enabling it explicitly while it still exists).
 
+The first converge after an upgrade is ordered to **fail closed**: each
+entry's legacy line is removed from `/etc/sudoers` *before* its drop-in
+file is written, so sudo never sees an entry defined twice (a duplicate
+alias definition is a parse error that would disable sudo entirely). The
+worst case mid-converge is that a single migrating entry is briefly
+absent, never a broken sudoers.
+
 Both mechanisms activate only when the module actually manages entries — a
 bare `include sudo` still touches nothing. Note that the OS-shipped
 `/etc/sudoers` content that 6.x wiped (`Defaults` such as `secure_path`,

@@ -52,6 +52,11 @@ describe 'sudo::user_specification' do
               line: "joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root)  PASSWD:EXEC:SETENV: ifconfig",
             ).that_notifies('Exec[visudo strict configuration check]')
           end
+
+          it 'removes the legacy line before the drop-in goes live (fail closed, never duplicate-alias broken)' do
+            is_expected.to contain_file_line("sudo legacy cleanup 0090_uspec_#{title} 0")
+              .that_comes_before("File[/etc/sudoers.d/0090_uspec_#{title}]")
+          end
         end
 
         context 'with ensure => absent' do

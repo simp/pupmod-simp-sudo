@@ -111,11 +111,16 @@ define sudo::default_entry (
   # file is the single source of truth.
   if $sudo::remove_legacy_entries {
     $_file_content.split("\n").filter |$line| { $line =~ /\S/ }.each |$index, $line| {
+      # `before` makes the first post-upgrade converge fail closed: the
+      # legacy line is removed before the drop-in goes live, so sudo never
+      # sees the entry defined twice (a duplicate alias definition is a
+      # parse error that would disable sudo entirely until cleanup ran).
       file_line { "sudo legacy cleanup ${_filename} ${index}":
         ensure  => absent,
         path    => '/etc/sudoers',
         line    => $line,
         require => Package['sudo'],
+        before  => File["${sudo::normalized_content_dir}/${_filename}"],
       }
 
       if $sudo::strict_config_check {
