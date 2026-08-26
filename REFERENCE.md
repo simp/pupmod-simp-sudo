@@ -28,6 +28,7 @@
 
 ### Functions
 
+* [`sudo::safe_name`](#sudo--safe_name): Sanitizes a resource title into a sudoers drop-in file name component.  sudo ignores include-dir files whose names contain a `.`, so anything
 * [`sudo::update_runas_list`](#sudo--update_runas_list): This function is used to help mitigate CVE-2019-14287 for  sudo version prior to 1.8.28.  It will disallow userid/groupid  of -1 if ALL or %A
 
 ### Data types
@@ -124,7 +125,8 @@ The directory under which this module writes its managed sudoers
 drop-in files. Defaults to `/etc/sudoers.d`, which sudo reads via the
 distribution's `#includedir` directive. Each managed entry is written as
 its own file here, so the shared `/etc/sudoers` is never owned by this
-module.
+module. Trailing slashes are stripped, so `/etc/sudoers.d/` and
+`/etc/sudoers.d` are equivalent.
 
 Default value: `'/etc/sudoers.d'`
 
@@ -219,6 +221,7 @@ The following parameters are available in the `sudo::alias` defined type:
 * [`comment`](#-sudo--alias--comment)
 * [`order`](#-sudo--alias--order)
 * [`validate`](#-sudo--alias--validate)
+* [`ensure`](#-sudo--alias--ensure)
 
 ##### <a name="-sudo--alias--content"></a>`content`
 
@@ -260,6 +263,17 @@ this resource.
 
 Default value: `undef`
 
+##### <a name="-sudo--alias--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+Set to `absent` to remove this entry's drop-in file. Simply deleting
+the resource from your manifests/Hiera leaves the file (and the alias)
+in place -- this module is deliberately non-destructive and never
+purges the content directory.
+
+Default value: `'present'`
+
 ### <a name="sudo--alias--cmnd"></a>`sudo::alias::cmnd`
 
 Convenience definition for adding a cmnd alias.
@@ -272,6 +286,7 @@ The following parameters are available in the `sudo::alias::cmnd` defined type:
 * [`comment`](#-sudo--alias--cmnd--comment)
 * [`order`](#-sudo--alias--cmnd--order)
 * [`validate`](#-sudo--alias--cmnd--validate)
+* [`ensure`](#-sudo--alias--cmnd--ensure)
 
 ##### <a name="-sudo--alias--cmnd--content"></a>`content`
 
@@ -307,6 +322,16 @@ this resource.
 
 Default value: `undef`
 
+##### <a name="-sudo--alias--cmnd--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+Set to `absent` to remove this entry's drop-in file. Simply deleting
+the resource from your manifests/Hiera leaves the file (and the alias)
+in place.
+
+Default value: `'present'`
+
 ### <a name="sudo--alias--host"></a>`sudo::alias::host`
 
 Convenience definition for adding a host alias.
@@ -319,6 +344,7 @@ The following parameters are available in the `sudo::alias::host` defined type:
 * [`comment`](#-sudo--alias--host--comment)
 * [`order`](#-sudo--alias--host--order)
 * [`validate`](#-sudo--alias--host--validate)
+* [`ensure`](#-sudo--alias--host--ensure)
 
 ##### <a name="-sudo--alias--host--content"></a>`content`
 
@@ -355,6 +381,16 @@ this resource.
 
 Default value: `undef`
 
+##### <a name="-sudo--alias--host--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+Set to `absent` to remove this entry's drop-in file. Simply deleting
+the resource from your manifests/Hiera leaves the file (and the alias)
+in place.
+
+Default value: `'present'`
+
 ### <a name="sudo--alias--runas"></a>`sudo::alias::runas`
 
 Convenience definition for adding a runas alias.
@@ -367,6 +403,7 @@ The following parameters are available in the `sudo::alias::runas` defined type:
 * [`comment`](#-sudo--alias--runas--comment)
 * [`order`](#-sudo--alias--runas--order)
 * [`validate`](#-sudo--alias--runas--validate)
+* [`ensure`](#-sudo--alias--runas--ensure)
 
 ##### <a name="-sudo--alias--runas--content"></a>`content`
 
@@ -402,6 +439,16 @@ this resource.
 
 Default value: `undef`
 
+##### <a name="-sudo--alias--runas--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+Set to `absent` to remove this entry's drop-in file. Simply deleting
+the resource from your manifests/Hiera leaves the file (and the alias)
+in place.
+
+Default value: `'present'`
+
 ### <a name="sudo--alias--user"></a>`sudo::alias::user`
 
 Convenience definition for adding a user alias.
@@ -414,6 +461,7 @@ The following parameters are available in the `sudo::alias::user` defined type:
 * [`comment`](#-sudo--alias--user--comment)
 * [`order`](#-sudo--alias--user--order)
 * [`validate`](#-sudo--alias--user--validate)
+* [`ensure`](#-sudo--alias--user--ensure)
 
 ##### <a name="-sudo--alias--user--content"></a>`content`
 
@@ -448,6 +496,16 @@ is installed. Overrides the module-wide `sudo::validate` setting for
 this resource.
 
 Default value: `undef`
+
+##### <a name="-sudo--alias--user--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+Set to `absent` to remove this entry's drop-in file. Simply deleting
+the resource from your manifests/Hiera leaves the file (and the alias)
+in place.
+
+Default value: `'present'`
 
 ### <a name="sudo--default_entry"></a>`sudo::default_entry`
 
@@ -491,6 +549,7 @@ The following parameters are available in the `sudo::default_entry` defined type
 * [`target`](#-sudo--default_entry--target)
 * [`def_type`](#-sudo--default_entry--def_type)
 * [`validate`](#-sudo--default_entry--validate)
+* [`ensure`](#-sudo--default_entry--ensure)
 
 ##### <a name="-sudo--default_entry--content"></a>`content`
 
@@ -530,6 +589,17 @@ this resource.
 
 Default value: `undef`
 
+##### <a name="-sudo--default_entry--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+Set to `absent` to remove this entry's drop-in file. Simply deleting
+the resource from your manifests/Hiera leaves the file (and the
+defaults line) in place -- this module is deliberately non-destructive
+and never purges the content directory.
+
+Default value: `'present'`
+
 ### <a name="sudo--include_dir"></a>`sudo::include_dir`
 
 Add include directories to /etc/sudoers
@@ -541,12 +611,18 @@ The following parameters are available in the `sudo::include_dir` defined type:
 * [`include_dir`](#-sudo--include_dir--include_dir)
 * [`tidy_include_dir`](#-sudo--include_dir--tidy_include_dir)
 * [`validate`](#-sudo--include_dir--validate)
+* [`ensure`](#-sudo--include_dir--ensure)
 
 ##### <a name="-sudo--include_dir--include_dir"></a>`include_dir`
 
 Data type: `Stdlib::Absolutepath`
 
-the directory to include in /etc/sudoers
+The directory to include in /etc/sudoers. Trailing slashes are
+stripped. When this equals `sudo::content_dir`, no drop-in file is
+written: `sudo::manage_includedir` already ensures /etc/sudoers reads
+the content directory, and a drop-in *inside* the content directory
+that includes the content directory again would make sudo fail with
+'too many levels of includes' -- a complete sudo lockout.
 
 ##### <a name="-sudo--include_dir--tidy_include_dir"></a>`tidy_include_dir`
 
@@ -568,6 +644,18 @@ Whether to validate the generated `#includedir` file with a non-strict
 `sudo::validate` setting for this resource.
 
 Default value: `undef`
+
+##### <a name="-sudo--include_dir--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+Set to `absent` to remove this resource's `#includedir` drop-in file.
+The include directory itself is never removed. Simply deleting the
+resource from your manifests/Hiera leaves the drop-in in place -- this
+module is deliberately non-destructive and never purges the content
+directory.
+
+Default value: `'present'`
 
 ### <a name="sudo--user_specification"></a>`sudo::user_specification`
 
@@ -603,6 +691,7 @@ The following parameters are available in the `sudo::user_specification` defined
 * [`setenv`](#-sudo--user_specification--setenv)
 * [`options`](#-sudo--user_specification--options)
 * [`validate`](#-sudo--user_specification--validate)
+* [`ensure`](#-sudo--user_specification--ensure)
 
 ##### <a name="-sudo--user_specification--user_list"></a>`user_list`
 
@@ -676,7 +765,50 @@ this resource.
 
 Default value: `undef`
 
+##### <a name="-sudo--user_specification--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+Set to `absent` to remove this entry's drop-in file. Simply deleting
+the resource from your manifests/Hiera leaves the file (and the rule)
+in place -- this module is deliberately non-destructive and never
+purges the content directory.
+
+Default value: `'present'`
+
 ## Functions
+
+### <a name="sudo--safe_name"></a>`sudo::safe_name`
+
+Type: Puppet Language
+
+Sanitizes a resource title into a sudoers drop-in file name component.
+
+sudo ignores include-dir files whose names contain a `.`, so anything
+outside `[0-9A-Za-z_-]` is replaced with `_`. Plain substitution is not
+injective (`admin.users` and `admin_users` would collide into the same
+file, turning distinct resources into a duplicate-declaration compile
+error), so whenever sanitization changes the title, a short digest of the
+original title is appended to keep the result unique per title.
+
+#### `sudo::safe_name(String[1] $name)`
+
+Sanitizes a resource title into a sudoers drop-in file name component.
+
+sudo ignores include-dir files whose names contain a `.`, so anything
+outside `[0-9A-Za-z_-]` is replaced with `_`. Plain substitution is not
+injective (`admin.users` and `admin_users` would collide into the same
+file, turning distinct resources into a duplicate-declaration compile
+error), so whenever sanitization changes the title, a short digest of the
+original title is appended to keep the result unique per title.
+
+Returns: `String` A filename-safe, injective transformation of the title
+
+##### `name`
+
+Data type: `String[1]`
+
+The resource title to sanitize
 
 ### <a name="sudo--update_runas_list"></a>`sudo::update_runas_list`
 

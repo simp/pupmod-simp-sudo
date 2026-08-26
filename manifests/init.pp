@@ -38,7 +38,8 @@
 #   drop-in files. Defaults to `/etc/sudoers.d`, which sudo reads via the
 #   distribution's `#includedir` directive. Each managed entry is written as
 #   its own file here, so the shared `/etc/sudoers` is never owned by this
-#   module.
+#   module. Trailing slashes are stripped, so `/etc/sudoers.d/` and
+#   `/etc/sudoers.d` are equivalent.
 #
 # @param validate
 #   Whether to validate each managed drop-in file with a non-strict
@@ -95,6 +96,12 @@ class sudo (
   Boolean                     $manage_includedir     = true,
   Boolean                     $remove_legacy_entries = true,
 ) {
+  # Normalized once here and used for all path construction and includedir
+  # directive matching: Stdlib::Absolutepath accepts a trailing slash,
+  # which would otherwise leak into drop-in paths and make the directive
+  # match in sudo::includedir miss the stock `#includedir /etc/sudoers.d`.
+  $normalized_content_dir = regsubst($content_dir, '(?<!^)/+$', '')
+
   package { 'sudo':
     ensure => $package_ensure
   }

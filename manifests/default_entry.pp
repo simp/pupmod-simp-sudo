@@ -22,6 +22,12 @@
 #   is installed. Overrides the module-wide `sudo::validate` setting for
 #   this resource.
 #
+# @param ensure
+#   Set to `absent` to remove this entry's drop-in file. Simply deleting
+#   the resource from your manifests/Hiera leaves the file (and the
+#   defaults line) in place -- this module is deliberately non-destructive
+#   and never purges the content directory.
+#
 # @example To create the following defaults line in sudoers:
 #   Defaults    requiretty, syslog=authpriv, !root_sudo, !umask, env_reset, env_keep = "COLORS DISPLAY HOSTNAME HISTSIZE INPUTRC KDEDIR \
 #                        LS_COLORS MAIL PS1 PS2 QTDIR USERNAME \
@@ -49,9 +55,10 @@
 #
 define sudo::default_entry (
   Array[String[1]]    $content,
-  Optional[String[1]] $target   = undef,
-  Sudo::DefType       $def_type = 'base',
-  Optional[Boolean]   $validate = undef,
+  Optional[String[1]]      $target   = undef,
+  Sudo::DefType            $def_type = 'base',
+  Optional[Boolean]        $validate = undef,
+  Enum['present','absent'] $ensure   = 'present',
 ) {
   include 'sudo'
   include 'sudo::config_check'
@@ -64,7 +71,7 @@ define sudo::default_entry (
     $_content = sudo::update_runas_list($content)
   }
 
-  $_filename = sprintf('%04d_default_%s', 80, regsubst($name, '[^0-9A-Za-z_-]', '_', 'G'))
+  $_filename = sprintf('%04d_default_%s', 80, sudo::safe_name($name))
 
   $_validate_cmd = pick($validate, $sudo::validate) ? {
     true    => '/usr/sbin/visudo -cf %',
@@ -80,8 +87,13 @@ define sudo::default_entry (
     },
   )
 
-  file { "${sudo::content_dir}/${_filename}":
-    ensure       => 'file',
+  $_file_ensure = $ensure ? {
+    'absent' => 'absent',
+    default  => 'file',
+  }
+
+  file { "${sudo::normalized_content_dir}/${_filename}":
+    ensure       => $_file_ensure,
     owner        => 'root',
     group        => 'root',
     mode         => '0440',
@@ -91,7 +103,7 @@ define sudo::default_entry (
   }
 
   if $sudo::strict_config_check {
-    File["${sudo::content_dir}/${_filename}"] ~> Exec['visudo strict configuration check']
+    File["${sudo::normalized_content_dir}/${_filename}"] ~> Exec['visudo strict configuration check']
   }
 
   # sudo module 6.x wrote this same template output directly into

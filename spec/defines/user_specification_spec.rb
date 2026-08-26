@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'digest'
 
 describe 'sudo::user_specification' do
   context 'supported operating systems' do
@@ -39,7 +40,7 @@ describe 'sudo::user_specification' do
             is_expected.to contain_file_line('sudo content_dir includedir').with(
               path: '/etc/sudoers',
               line: '#includedir /etc/sudoers.d',
-              match: '^[@#]includedir[ \t]+/etc/sudoers\.d[ \t]*$',
+              match: '^[@#]includedir[ \t]+"?/etc/sudoers\.d/*"?[ \t]*$',
               replace: false,
             ).that_notifies('Exec[visudo strict configuration check]')
           end
@@ -50,6 +51,44 @@ describe 'sudo::user_specification' do
               path: '/etc/sudoers',
               line: "joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root)  PASSWD:EXEC:SETENV: ifconfig",
             ).that_notifies('Exec[visudo strict configuration check]')
+          end
+        end
+
+        context 'with ensure => absent' do
+          let(:params) do
+            {
+              user_list: ['joe'],
+              cmnd: ['ifconfig'],
+              ensure: 'absent',
+            }
+          end
+
+          it 'removes the drop-in file' do
+            is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
+              .with_ensure('absent')
+          end
+
+          it 'still removes the byte-identical legacy line' do
+            is_expected.to contain_file_line("sudo legacy cleanup 0090_uspec_#{title} 0")
+              .with_ensure('absent')
+          end
+        end
+
+        context 'with a title requiring sanitization' do
+          let(:title) { 'admin.users' }
+          let(:params) do
+            {
+              user_list: ['joe'],
+              cmnd: ['ifconfig'],
+            }
+          end
+
+          # The digest suffix keeps sanitized names injective: without it,
+          # 'admin.users' and 'admin_users' would collide into the same
+          # file and fail compilation with a duplicate declaration.
+          it do
+            digest = Digest::SHA256.hexdigest('admin.users')[0, 8]
+            is_expected.to create_file("/etc/sudoers.d/0090_uspec_admin_users_#{digest}")
           end
         end
 

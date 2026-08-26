@@ -30,6 +30,21 @@
   - `sudo::remove_legacy_entries` removes lines from `/etc/sudoers` that
     are byte-identical to entry content now managed as drop-in files,
     preventing duplicate-alias parse errors from the stale 6.x content
+    (an upgrade aid slated for removal in the next major release)
+- All defines now accept `ensure => absent` to remove their drop-in file;
+  deleting a resource from manifests/Hiera intentionally leaves its file
+  in place (the module is non-destructive and never purges the content
+  directory)
+- `sudo::include_dir` skips writing its drop-in when `$include_dir` equals
+  `sudo::content_dir` — a drop-in inside the content directory that
+  re-includes it would make sudo fail with 'too many levels of includes'
+- `sudo::content_dir` and `sudo::include_dir::include_dir` are normalized
+  (trailing slashes stripped), and the `manage_includedir` directive match
+  tolerates quoting and trailing slashes, preventing duplicate
+  `#includedir` directives
+- Titles that require sanitization for use as drop-in filenames now get a
+  short digest suffix so distinct titles can no longer collide into the
+  same file (new `sudo::safe_name()` function)
 
 * Mon Aug 24 2026 Steven Pritchard <steve@sicura.us> - 6.0.2
 - [puppetsync] Update metadata.json dependency ranges from the Forge

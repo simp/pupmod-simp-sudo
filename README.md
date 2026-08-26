@@ -45,7 +45,13 @@ particular:
   `/etc/sudoers.d/`** (configurable via the `sudo::content_dir` parameter),
   which sudo reads via its default `#includedir`. File names carry a
   numeric prefix so the previous relative ordering (aliases, then defaults,
-  then user specifications) is preserved.
+  then user specifications) is preserved. Titles containing characters
+  outside `[0-9A-Za-z_-]` are sanitized (sudo skips include-dir files with
+  a `.` in the name) and receive a short digest suffix so distinct titles
+  can never collide into one file. Note that sanitization can change how
+  two same-prefix entries sort relative to each other compared to 6.x's
+  fragment ordering — sudoers is last-match-wins, so if the relative order
+  of two entries matters, prefer titles that need no sanitization.
 - The **`puppetlabs/concat` dependency has been removed.** Validation is
   now performed with `visudo` directly, in two layers:
   - Each drop-in file is validated with a non-strict `visudo -cf` *before*
@@ -65,6 +71,35 @@ particular:
     immediately.
 - `sudo::package_ensure` no longer follows `simp_options::package_ensure`;
   it defaults to `installed`.
+- **Removing an entry from your manifests/Hiera no longer removes the
+  rule.** This module is deliberately non-destructive: it never purges the
+  content directory, so a drop-in file whose Puppet resource goes away is
+  simply left in place and sudo keeps honoring it. (Under 6.x, deleting an
+  entry removed its `concat` fragment and the rule disappeared on the next
+  run.) To revoke an entry, keep the resource and set `ensure => absent`
+  on it — every define (`sudo::alias`, `sudo::alias::*`,
+  `sudo::default_entry`, `sudo::user_specification`,
+  `sudo::include_dir`) supports it:
+
+  ```yaml
+  sudo::user_specifications:
+    contractor_su:
+      user_list: ['contractor']
+      cmnd: ['/bin/su']
+      ensure: absent
+  ```
+
+  This is the standard lifecycle pattern for drop-in-directory Puppet
+  modules; it trades automatic reaping for the guarantee that this module
+  never deletes a file it cannot prove it owns.
+- **Declaring `sudo::include_dir` for the content directory itself writes
+  nothing.** A drop-in *inside* `/etc/sudoers.d` that re-includes
+  `/etc/sudoers.d` would make sudo fail with `too many levels of includes`
+  (a complete sudo lockout), so when `$include_dir` equals
+  `sudo::content_dir` the drop-in is skipped — `sudo::manage_includedir`
+  already guarantees `/etc/sudoers` reads the content directory. Sites
+  carrying `sudo::include_dirs: ['/etc/sudoers.d']` in Hiera (the way 6.x
+  enabled drop-ins) can keep it; it is now a safe no-op.
 
 ### Recovery paths
 
@@ -109,9 +144,16 @@ this:
 - **`sudo::remove_legacy_entries`** (default `true`) — removes lines from
   `/etc/sudoers` that are **byte-identical** to entry content this module
   now writes as drop-in files (6.x wrote the same template output directly
-  into `/etc/sudoers`). Nothing else in the file is touched. `#includedir`
+  into `/etc/sudoers`). The match is on content, not provenance, but that
+  is what makes it safe: a line is only ever removed while the module is
+  simultaneously enforcing that exact content as a drop-in, so the
+  effective sudo policy cannot change — regardless of whether the line was
+  written by 6.x, by an administrator, or shipped by the OS. `#includedir`
   lines are deliberately excluded from cleanup, since the 6.x-written one
-  may be the directive keeping the drop-ins active.
+  may be the directive keeping the drop-ins active. This is an upgrade
+  aid, not a permanent feature: it is slated for removal in the next major
+  release, after which any remaining 6.x remnants must be cleaned up by
+  hand (or by re-enabling it explicitly while it still exists).
 
 Both mechanisms activate only when the module actually manages entries — a
 bare `include sudo` still touches nothing. Note that the OS-shipped
