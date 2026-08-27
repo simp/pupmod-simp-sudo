@@ -1,0 +1,3 @@
+---
+sudo::manage_includedir: false
+sudo::remove_legacy_entries: false

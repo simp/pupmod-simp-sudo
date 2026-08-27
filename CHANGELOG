@@ -1,3 +1,51 @@
+* Tue Aug 25 2026 Steven Pritchard <steve@sicura.us> - 7.0.0
+- Reduce blast radius (BREAKING CHANGE): a bare `include sudo` now installs
+  the `sudo` package and does nothing else
+  - The module no longer manages (or blanks) the shared `/etc/sudoers`
+  - Managed aliases, defaults, user specifications, and `#includedir` lines
+    are now written as individual drop-in files under `/etc/sudoers.d/`
+    (configurable via the new `sudo::content_dir` parameter)
+  - Dropped the `puppetlabs/concat` dependency; validation now uses `visudo`
+    directly: each drop-in file is checked with a non-strict `visudo -cf`
+    before install (`sudo::validate`, per-resource `validate`), and any
+    change triggers a strict parse (`visudo -csf /etc/sudoers`) of the
+    whole configuration (`sudo::strict_config_check`)
+  - `sudo::package_ensure` no longer follows `simp_options::package_ensure`
+    (defaults to `installed`)
+- Ship a `simp:defaults` compliance_engine profile that restores the
+  pre-refactor defaults; activate with
+  `compliance_engine::enforcement: [simp:defaults]`
+- `sudo::include_dir` no longer forces mode 0640 onto the include
+  directory and every file within it (#138); the directory is now managed
+  as 0750 (the distribution default for `/etc/sudoers.d`), managed drop-in
+  files are 0440, and unmanaged files are left untouched unless
+  `tidy_include_dir` purges them
+- Handle upgrades from 6.x, which owned `/etc/sudoers` outright, with two
+  line-targeted mechanisms that activate only when entries are managed
+  (both enabled by default):
+  - `sudo::manage_includedir` ensures `/etc/sudoers` contains an
+    `#includedir` directive for `sudo::content_dir` (appended only when no
+    equivalent directive exists) so drop-in files are never silently
+    ignored
+  - `sudo::remove_legacy_entries` removes lines from `/etc/sudoers` that
+    are byte-identical to entry content now managed as drop-in files,
+    preventing duplicate-alias parse errors from the stale 6.x content
+    (an upgrade aid slated for removal in the next major release)
+- All defines now accept `ensure => absent` to remove their drop-in file;
+  deleting a resource from manifests/Hiera intentionally leaves its file
+  in place (the module is non-destructive and never purges the content
+  directory)
+- `sudo::include_dir` skips writing its drop-in when `$include_dir` equals
+  `sudo::content_dir` — a drop-in inside the content directory that
+  re-includes it would make sudo fail with 'too many levels of includes'
+- `sudo::content_dir` and `sudo::include_dir::include_dir` are normalized
+  (trailing slashes stripped), and the `manage_includedir` directive match
+  tolerates quoting and trailing slashes, preventing duplicate
+  `#includedir` directives
+- Titles that require sanitization for use as drop-in filenames now get a
+  short digest suffix so distinct titles can no longer collide into the
+  same file (new `sudo::safe_name()` function)
+
 * Mon Aug 24 2026 Steven Pritchard <steve@sicura.us> - 6.0.2
 - [puppetsync] Update metadata.json dependency ranges from the Forge
 

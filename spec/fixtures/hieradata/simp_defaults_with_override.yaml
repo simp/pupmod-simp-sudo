@@ -1,0 +1,4 @@
+---
+compliance_engine::enforcement:
+  - simp:defaults
+sudo::package_ensure: latest

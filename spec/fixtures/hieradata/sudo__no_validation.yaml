@@ -1,0 +1,3 @@
+---
+sudo::validate: false
+sudo::strict_config_check: false
