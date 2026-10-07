@@ -12,7 +12,7 @@
 #   `deep`, so a higher layer can remove one entry without restating the
 #   others. Arrays inside entries are unioned, not replaced: to narrow one,
 #   set the old entry to `ensure: absent` and declare a new entry under a
-#   new title.
+#   new title. This does not work for `aliases`; see that parameter.
 #
 # @param default_entries
 #   `sudo::default_entry` resources to declare, as a Hash of resource title
@@ -25,7 +25,10 @@
 #   define's parameters. The title is the alias name (upcased in the file).
 #   Each entry writes one `User_Alias`, `Runas_Alias`, `Host_Alias` or
 #   `Cmnd_Alias` line as its own drop-in file under `$content_dir`. Removal
-#   and merging work as for `user_specifications`.
+#   and merging work as for `user_specifications`, except narrowing: since
+#   the title is the alias name, change an alias's `content` in the Hiera
+#   layer that defines it. A new title renames the alias, and every user
+#   specification that refers to it would need to be re-declared too.
 #
 # @param include_dirs an array of paths to include in the sudoers file
 #

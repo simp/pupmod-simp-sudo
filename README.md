@@ -289,8 +289,11 @@ sudo::user_specifications:
 
 Arrays inside an entry are unioned by the `deep` merge, not replaced, so a
 higher layer cannot narrow `user_list`, `cmnd`, `content` or `host_list`.
-To narrow one, set the old entry to `ensure: absent` and declare a new
-entry under a new title.
+For a user specification or default entry, set the old entry to
+`ensure: absent` and declare a new entry under a new title. An alias's
+title is its name, so to narrow an alias's `content`, change it in the
+Hiera layer that defines it. A new title renames the alias, and every user
+specification that refers to it would need to be re-declared too.
 
 ## Reference
 
