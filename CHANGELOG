@@ -1,3 +1,8 @@
+* Wed Oct 07 2026 Hazel Caballero <hazel@sicura.us> - 7.0.1
+- Document the shape of `sudo::user_specifications`, `sudo::default_entries`
+  and `sudo::aliases`, with Hiera examples, including removing an entry
+  with `ensure: absent`
+
 * Tue Aug 25 2026 Steven Pritchard <steve@sicura.us> - 7.0.0
 - Reduce blast radius (BREAKING CHANGE): a bare `include sudo` now installs
   the `sudo` package and does nothing else

@@ -17,14 +17,14 @@
 
 ### Defined types
 
-* [`sudo::alias`](#sudo--alias): Adds an alias to /etc/sudoers. See the 'Aliases' section of sudoers (5) for information about aliases    Use the alias definition:     alias 
+* [`sudo::alias`](#sudo--alias): Adds an alias to /etc/sudoers. See the 'Aliases' section of sudoers (5) for information about aliases    Use the alias definition:     sudo::
 * [`sudo::alias::cmnd`](#sudo--alias--cmnd): Convenience definition for adding a cmnd alias.
 * [`sudo::alias::host`](#sudo--alias--host): Convenience definition for adding a host alias.
 * [`sudo::alias::runas`](#sudo--alias--runas): Convenience definition for adding a runas alias.
 * [`sudo::alias::user`](#sudo--alias--user): Convenience definition for adding a user alias.
 * [`sudo::default_entry`](#sudo--default_entry): Adds an entry to the defaults section of /etc/sudoers in order to override runtime defaults. See the 'Defaults' section of sudoers(5) for mor
 * [`sudo::include_dir`](#sudo--include_dir): Add include directories to /etc/sudoers
-* [`sudo::user_specification`](#sudo--user_specification): Add a user_spec entry to /etc/sudoers in order to determine which commands a user may run as the given user on the given host. See the 'User 
+* [`sudo::user_specification`](#sudo--user_specification): Add a user_spec entry to /etc/sudoers in order to determine which commands a user may run as the given user on the given host. See the 'User
 
 ### Functions
 
@@ -42,6 +42,34 @@
 
 Constructs a sudoers file based on configured aliases, defaults, and user
 specifications.
+
+#### Examples
+
+##### Manage sudoers entries from Hiera
+
+```puppet
+---
+sudo::aliases:
+  admins:
+    alias_type: user
+    content: ['alice', 'bob']
+sudo::default_entries:
+  logging:
+    content: ['syslog=authpriv', 'log_output']
+sudo::user_specifications:
+  admins_all:
+    user_list: ['ADMINS']
+    cmnd: ['ALL']
+```
+
+##### Remove an entry set in a lower Hiera layer
+
+```puppet
+---
+sudo::user_specifications:
+  admins_all:
+    ensure: absent
+```
 
 #### Parameters
 
@@ -62,23 +90,17 @@ The following parameters are available in the `sudo` class:
 
 Data type: `Hash`
 
-A hash of sudo::user_specification resources that can be set in hiera
-Example:
-  ---
-  sudo::user_specifications:
-    simp_su:
-      user_list: ['simp']
-      cmnd: ['/bin/su']
-    users_yum_update:
-      user_list:
-        - '%users'
-      cmnd:
-        - 'yum update'
-    test_resource:
-      user_list: ['%group']
-      cmnd: ['w']
-      runas: root
-      passwd: true
+`sudo::user_specification` resources to declare, as a Hash of resource
+title to that define's parameters. Each entry is written as its own
+drop-in file under `$content_dir`.
+
+Deleting an entry from Hiera leaves its file, and the rule, in place.
+Set `ensure: absent` on the entry to remove it, keeping its required
+parameters in the same or a lower Hiera layer. The Hash is merged with
+`deep`, so a higher layer can remove one entry without restating the
+others. Arrays inside entries are unioned, not replaced: to narrow one,
+set the old entry to `ensure: absent` and declare a new entry under a
+new title. This does not work for `aliases`; see that parameter.
 
 Default value: `{}`
 
@@ -86,8 +108,10 @@ Default value: `{}`
 
 Data type: `Hash`
 
-A hash of sudo::default_entry resources that can be set in hiera to
-override runtime defaults in the 'Defaults' section of /etc/sudoers
+`sudo::default_entry` resources to declare, as a Hash of resource title
+to that define's parameters. Each entry writes one `Defaults` line as
+its own drop-in file under `$content_dir`. Removal and merging work as
+for `user_specifications`.
 
 Default value: `{}`
 
@@ -95,9 +119,14 @@ Default value: `{}`
 
 Data type: `Hash`
 
-A hash of sudo::alias resources that can be set in hiera to add
-User_Alias, Runas_Alias, Host_Alias, or Cmnd_Alias entries to
-/etc/sudoers
+`sudo::alias` resources to declare, as a Hash of resource title to that
+define's parameters. The title is the alias name (upcased in the file).
+Each entry writes one `User_Alias`, `Runas_Alias`, `Host_Alias` or
+`Cmnd_Alias` line as its own drop-in file under `$content_dir`. Removal
+and merging work as for `user_specifications`, except narrowing: since
+the title is the alias name, change an alias's `content` in the Hiera
+layer that defines it. A new title renames the alias, and every user
+specification that refers to it would need to be re-declared too.
 
 Default value: `{}`
 
@@ -199,7 +228,7 @@ Adds an alias to /etc/sudoers.
 See the 'Aliases' section of sudoers (5) for information about aliases
 
   Use the alias definition:
-    alias { 'user_alias':
+    sudo::alias { 'FULLTIMERS':
       content => [ 'millert','mikef','dowdy' ],
       alias_type => 'user'
     }
@@ -863,4 +892,3 @@ Matches the list configuration items for which  defaults can be set
 in the sudoers file.
 
 Alias of `Enum['base', 'cmnd', 'host', 'user', 'runas']`
-

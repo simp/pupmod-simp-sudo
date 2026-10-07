@@ -255,6 +255,46 @@ sudo::alias::user { 'FULLTIMERS':
 }
 ```
 
+### Manage entries from Hiera
+
+`sudo::aliases`, `sudo::default_entries` and `sudo::user_specifications`
+declare the matching defined types from Hiera. Each is a Hash of resource
+title to that define's parameters:
+
+```yaml
+sudo::aliases:
+  admins:
+    alias_type: user
+    content: ['alice', 'bob']
+sudo::default_entries:
+  logging:
+    content: ['syslog=authpriv', 'log_output']
+sudo::user_specifications:
+  admins_all:
+    user_list: ['ADMINS']
+    cmnd: ['ALL']
+```
+
+Deleting an entry from Hiera leaves its drop-in file, and the rule, in
+place. To remove one, set `ensure: absent` on it and keep its required
+parameters (in the same or a lower Hiera layer). The three Hashes are
+merged with `deep`, so a higher Hiera layer (for example, node data) can
+remove a single entry set in a lower one without restating the rest:
+
+```yaml
+sudo::user_specifications:
+  admins_all:
+    ensure: absent
+```
+
+Arrays inside an entry are unioned by the `deep` merge, not replaced, so a
+higher layer cannot narrow `user_list`, `cmnd`, `content` or `host_list`.
+For a user specification or default entry, set the old entry to
+`ensure: absent` and declare a new entry under a new title. An alias's
+title is its name, so to narrow an alias's `content`, change it in the
+Hiera layer that defines it. A new title renames the alias, and every user
+specification that refers to it would need to be re-declared too.
+
 ## Reference
 
 ### Classes

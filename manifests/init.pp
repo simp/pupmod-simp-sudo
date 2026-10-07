@@ -2,32 +2,33 @@
 # specifications.
 #
 # @param user_specifications
-#   A hash of sudo::user_specification resources that can be set in hiera
-#   Example:
-#     ---
-#     sudo::user_specifications:
-#       simp_su:
-#         user_list: ['simp']
-#         cmnd: ['/bin/su']
-#       users_yum_update:
-#         user_list:
-#           - '%users'
-#         cmnd:
-#           - 'yum update'
-#       test_resource:
-#         user_list: ['%group']
-#         cmnd: ['w']
-#         runas: root
-#         passwd: true
+#   `sudo::user_specification` resources to declare, as a Hash of resource
+#   title to that define's parameters. Each entry is written as its own
+#   drop-in file under `$content_dir`.
+#
+#   Deleting an entry from Hiera leaves its file, and the rule, in place.
+#   Set `ensure: absent` on the entry to remove it, keeping its required
+#   parameters in the same or a lower Hiera layer. The Hash is merged with
+#   `deep`, so a higher layer can remove one entry without restating the
+#   others. Arrays inside entries are unioned, not replaced: to narrow one,
+#   set the old entry to `ensure: absent` and declare a new entry under a
+#   new title. This does not work for `aliases`; see that parameter.
 #
 # @param default_entries
-#   A hash of sudo::default_entry resources that can be set in hiera to
-#   override runtime defaults in the 'Defaults' section of /etc/sudoers
+#   `sudo::default_entry` resources to declare, as a Hash of resource title
+#   to that define's parameters. Each entry writes one `Defaults` line as
+#   its own drop-in file under `$content_dir`. Removal and merging work as
+#   for `user_specifications`.
 #
 # @param aliases
-#   A hash of sudo::alias resources that can be set in hiera to add
-#   User_Alias, Runas_Alias, Host_Alias, or Cmnd_Alias entries to
-#   /etc/sudoers
+#   `sudo::alias` resources to declare, as a Hash of resource title to that
+#   define's parameters. The title is the alias name (upcased in the file).
+#   Each entry writes one `User_Alias`, `Runas_Alias`, `Host_Alias` or
+#   `Cmnd_Alias` line as its own drop-in file under `$content_dir`. Removal
+#   and merging work as for `user_specifications`, except narrowing: since
+#   the title is the alias name, change an alias's `content` in the Hiera
+#   layer that defines it. A new title renames the alias, and every user
+#   specification that refers to it would need to be re-declared too.
 #
 # @param include_dirs an array of paths to include in the sudoers file
 #
@@ -81,6 +82,26 @@
 #   specification in another file still references) and fails the Puppet
 #   run so the problem is visible. Disable this if your site intentionally
 #   carries unresolved alias references.
+#
+# @example Manage sudoers entries from Hiera
+#   ---
+#   sudo::aliases:
+#     admins:
+#       alias_type: user
+#       content: ['alice', 'bob']
+#   sudo::default_entries:
+#     logging:
+#       content: ['syslog=authpriv', 'log_output']
+#   sudo::user_specifications:
+#     admins_all:
+#       user_list: ['ADMINS']
+#       cmnd: ['ALL']
+#
+# @example Remove an entry set in a lower Hiera layer
+#   ---
+#   sudo::user_specifications:
+#     admins_all:
+#       ensure: absent
 #
 # @author https://github.com/simp/pupmod-simp-sudo/graphs/contributors
 #
