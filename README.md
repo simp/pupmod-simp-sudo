@@ -276,7 +276,8 @@ sudo::user_specifications:
 ```
 
 Deleting an entry from Hiera leaves its drop-in file, and the rule, in
-place. To remove one, set `ensure: absent` on it. The three Hashes are
+place. To remove one, set `ensure: absent` on it and keep its required
+parameters (in the same or a lower Hiera layer). The three Hashes are
 merged with `deep`, so a higher Hiera layer (for example, node data) can
 remove a single entry set in a lower one without restating the rest:
 
@@ -285,6 +286,11 @@ sudo::user_specifications:
   admins_all:
     ensure: absent
 ```
+
+Arrays inside an entry are unioned by the `deep` merge, not replaced, so a
+higher layer cannot narrow `user_list`, `cmnd`, `content` or `host_list`.
+To narrow one, set the old entry to `ensure: absent` and declare a new
+entry under a new title.
 
 ## Reference
 

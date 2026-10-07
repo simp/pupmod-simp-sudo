@@ -95,9 +95,12 @@ title to that define's parameters. Each entry is written as its own
 drop-in file under `$content_dir`.
 
 Deleting an entry from Hiera leaves its file, and the rule, in place.
-Set `ensure: absent` on the entry to remove it. The Hash is merged with
-`deep`, so a higher Hiera layer can change or remove one entry without
-restating the others.
+Set `ensure: absent` on the entry to remove it, keeping its required
+parameters in the same or a lower Hiera layer. The Hash is merged with
+`deep`, so a higher layer can remove one entry without restating the
+others. Arrays inside entries are unioned, not replaced: to narrow one,
+set the old entry to `ensure: absent` and declare a new entry under a
+new title.
 
 Default value: `{}`
 
@@ -222,7 +225,7 @@ Adds an alias to /etc/sudoers.
 See the 'Aliases' section of sudoers (5) for information about aliases
 
   Use the alias definition:
-    sudo::alias { 'user_alias':
+    sudo::alias { 'FULLTIMERS':
       content => [ 'millert','mikef','dowdy' ],
       alias_type => 'user'
     }

@@ -29,7 +29,7 @@
 # @example To create the following alias in sudoers:
 #     User_Alias FULLTIMERS = millert, mikef, dowdy
 #   Use the alias definition:
-#     sudo::alias { 'user_alias':
+#     sudo::alias { 'FULLTIMERS':
 #       content => [ 'millert','mikef','dowdy' ],
 #       alias_type => 'user'
 #     }
