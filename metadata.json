@@ -1,6 +1,6 @@
 {
   "name": "simp-sudo",
-  "version": "7.0.1",
+  "version": "7.1.0",
   "author": "SIMP Team",
   "summary": "Manage sudo",
   "license": "Apache-2.0",
@@ -65,7 +65,7 @@
   "requirements": [
     {
       "name": "openvox",
-      "version_requirement": ">= 8.0.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 10.0.0"
     }
   ]
 }
