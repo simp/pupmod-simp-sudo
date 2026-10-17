@@ -1,0 +1,4 @@
+---
+# The sudo package ships /etc/sudoers.d as 0755 on Debian and Ubuntu
+# (0750 on EL).
+sudo::include_dir_mode: '0755'

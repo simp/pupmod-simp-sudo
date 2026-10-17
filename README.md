@@ -316,7 +316,11 @@ specification that refers to it would need to be re-declared too.
 ## Limitations
 
 SIMP Puppet modules are generally intended to be used on a Red Hat Enterprise
-Linux-compatible distribution.
+Linux-compatible distribution. This module also supports Ubuntu 22.04 and
+24.04, where the stock `/etc/sudoers` already reads `/etc/sudoers.d` through
+`@includedir`, so `sudo::manage_includedir` leaves it untouched.
+
+See `metadata.json` for the full list of supported operating systems.
 
 ## Development
 

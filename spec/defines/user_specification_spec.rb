@@ -1,11 +1,19 @@
 require 'spec_helper'
+require 'support/supported_os_facts'
 require 'digest'
 
 describe 'sudo::user_specification' do
   context 'supported operating systems' do
-    on_supported_os.each do |os, os_facts|
+    supported_os_facts.each do |os, os_facts|
       context "on #{os}" do
         let(:facts) { os_facts }
+
+        # The FacterDB factsets used for Ubuntu carry no legacy top-level
+        # hostname/fqdn facts, and their nested keys are Strings rather than
+        # Symbols, so read the structured fact either way.
+        let(:networking) { os_facts[:networking].transform_keys(&:to_s) }
+        let(:hostname) { networking['hostname'] }
+        let(:fqdn) { networking['fqdn'] }
 
         let(:title) { 'user_specification_spec' }
 
@@ -19,7 +27,7 @@ describe 'sudo::user_specification' do
 
           it do
             is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
-              .with_content("joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root)  PASSWD:EXEC:SETENV: ifconfig\n")
+              .with_content("joe, jimbob, %foo    #{hostname}, #{fqdn}=(root)  PASSWD:EXEC:SETENV: ifconfig\n")
           end
 
           it 'validates the file with visudo before install' do
@@ -49,7 +57,7 @@ describe 'sudo::user_specification' do
             is_expected.to contain_file_line("sudo legacy cleanup 0090_uspec_#{title} 0").with(
               ensure: 'absent',
               path: '/etc/sudoers',
-              line: "joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root)  PASSWD:EXEC:SETENV: ifconfig",
+              line: "joe, jimbob, %foo    #{hostname}, #{fqdn}=(root)  PASSWD:EXEC:SETENV: ifconfig",
             ).that_notifies('Exec[visudo strict configuration check]')
           end
 
@@ -165,7 +173,7 @@ describe 'sudo::user_specification' do
 
           it do
             is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
-              .with_content("joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root)  NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n")
+              .with_content("joe, jimbob, %foo    #{hostname}, #{fqdn}=(root)  NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n")
           end
         end
 
@@ -197,7 +205,7 @@ describe 'sudo::user_specification' do
 
           it do
             is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
-              .with_content("joe, jimbob, %foo    #{facts[:hostname]}, #{facts[:fqdn]}=(root) ROLE=unconfined_r NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n")
+              .with_content("joe, jimbob, %foo    #{hostname}, #{fqdn}=(root) ROLE=unconfined_r NOPASSWD:NOEXEC:NOSETENV: ifconfig, tcpdump\n")
           end
         end
         # test for cve_2019-14287 mitigation
@@ -220,7 +228,7 @@ describe 'sudo::user_specification' do
 
           it do
             is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
-              .with_content("joe    #{facts[:hostname]}, #{facts[:fqdn]}=(ALL, !#-1)  NOPASSWD:NOEXEC:NOSETENV: cat\n")
+              .with_content("joe    #{hostname}, #{fqdn}=(ALL, !#-1)  NOPASSWD:NOEXEC:NOSETENV: cat\n")
           end
         end
         context 'with  sudo version >  1.8.28' do
@@ -242,7 +250,7 @@ describe 'sudo::user_specification' do
 
           it do
             is_expected.to create_file("/etc/sudoers.d/0090_uspec_#{title}")
-              .with_content("joe    #{facts[:hostname]}, #{facts[:fqdn]}=(ALL)  NOPASSWD:NOEXEC:NOSETENV: cat\n")
+              .with_content("joe    #{hostname}, #{fqdn}=(ALL)  NOPASSWD:NOEXEC:NOSETENV: cat\n")
           end
         end
       end
