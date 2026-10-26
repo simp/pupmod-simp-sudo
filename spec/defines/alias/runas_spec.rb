@@ -1,8 +1,9 @@
 require 'spec_helper'
+require 'support/supported_os_facts'
 
 describe 'sudo::alias::runas' do
   context 'supported operating systems' do
-    on_supported_os.each do |os, os_facts|
+    supported_os_facts.each do |os, os_facts|
       context "on #{os}" do
         context 'test with comment' do
           let(:facts) { os_facts }

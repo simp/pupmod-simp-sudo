@@ -1,3 +1,11 @@
+* Sat Oct 17 2026 Steven Pritchard <steve@sicura.us> - 7.2.0
+- Add support for Ubuntu 22.04 and 24.04
+- `sudo::user_specification` now writes the `SETENV`/`NOSETENV` tag
+  (`setenv` parameter) on every OS, not only on EL
+- Add `sudo::include_dir_mode` for the mode of directories managed by
+  `sudo::include_dir` (`0750` on EL, `0755` on Ubuntu, matching each
+  distribution's `/etc/sudoers.d`)
+
 * Thu Oct 08 2026 Steven Pritchard <steve@sicura.us> - 7.1.0
 - Add support for OpenVox 9
 - Update metadata.json dependency ranges from the Forge

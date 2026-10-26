@@ -43,15 +43,16 @@ define sudo::include_dir (
   # directive that keeps this module's drop-in files active (and would
   # conflict with the line sudo::includedir ensures present).
 
-  # 0750 matches the distribution default for /etc/sudoers.d. Recursion is
-  # only enabled when purging: it would otherwise force this mode onto
-  # pre-existing unmanaged files (simp/pupmod-simp-sudo#138). Drop-in files
-  # managed by this module are 0440 via their own resources.
+  # sudo::include_dir_mode matches the distribution default for
+  # /etc/sudoers.d. Recursion is only enabled when purging: it would
+  # otherwise force this mode onto pre-existing unmanaged files
+  # (simp/pupmod-simp-sudo#138). Drop-in files managed by this module are
+  # 0440 via their own resources.
   file { $_include_dir:
     ensure  => 'directory',
     owner   => 'root',
     group   => 'root',
-    mode    => '0750',
+    mode    => $sudo::include_dir_mode,
     purge   => $tidy_include_dir,
     recurse => $tidy_include_dir,
   }

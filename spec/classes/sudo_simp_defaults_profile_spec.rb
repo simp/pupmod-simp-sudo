@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'support/supported_os_facts'
 
 # Validates the shipped `simp:defaults` compliance_engine profile. Enabling
 # `compliance_engine::enforcement: [simp:defaults]` must restore the
@@ -12,7 +13,7 @@ describe 'sudo' do
   end
 
   context 'supported operating systems' do
-    on_supported_os.each do |os, os_facts|
+    supported_os_facts.each do |os, os_facts|
       context "on #{os}" do
         context 'with simp:defaults enforced' do
           let(:facts) { os_facts.merge(custom_hiera: 'simp_defaults_enforced') }

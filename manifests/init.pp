@@ -32,6 +32,11 @@
 #
 # @param include_dirs an array of paths to include in the sudoers file
 #
+# @param include_dir_mode
+#   The mode of each directory declared through `sudo::include_dir` (and so
+#   `include_dirs`). Defaults to the distribution's mode for
+#   `/etc/sudoers.d`: `0750` on EL and `0755` on Ubuntu (from module data).
+#
 # @param package_ensure The ensure status of packages to be managed
 #
 # @param content_dir
@@ -111,6 +116,7 @@ class sudo (
   Hash                        $aliases             = {},
   String[1]                   $package_ensure      = 'installed',
   Array[Stdlib::Absolutepath] $include_dirs        = [],
+  Stdlib::Filemode            $include_dir_mode    = '0750',
   Stdlib::Absolutepath        $content_dir         = '/etc/sudoers.d',
   Boolean                     $validate              = true,
   Boolean                     $strict_config_check   = true,
