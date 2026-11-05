@@ -1,9 +1,10 @@
 require 'spec_helper'
+require 'support/supported_os_facts'
 require 'digest'
 
 describe 'sudo::include_dir' do
   context 'supported operating systems' do
-    on_supported_os.each do |os, os_facts|
+    supported_os_facts.each do |os, os_facts|
       context "on #{os}" do
         let(:facts) { os_facts }
         let(:title) { 'include_dir_spec' }
@@ -19,14 +20,17 @@ describe 'sudo::include_dir' do
             }
           end
 
-          # The directory matches the distribution default (0750) and must
-          # not recurse: recursion would force the directory mode onto
-          # pre-existing unmanaged files (simp/pupmod-simp-sudo#138).
+          # The directory matches the distribution default (0750 on EL,
+          # 0755 on Debian/Ubuntu) and must not recurse: recursion would
+          # force the directory mode onto pre-existing unmanaged files
+          # (simp/pupmod-simp-sudo#138).
+          let(:expected_mode) { (os_facts[:os].transform_keys(&:to_s)['family'] == 'Debian') ? '0755' : '0750' }
+
           it do
             is_expected.to create_file('/etc/sudoers.d')
               .with(
                   ensure:  'directory',
-                  mode:    '0750',
+                  mode:    expected_mode,
                   owner:   'root',
                   group:   'root',
                   purge:   false,

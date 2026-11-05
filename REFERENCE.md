@@ -79,6 +79,7 @@ The following parameters are available in the `sudo` class:
 * [`default_entries`](#-sudo--default_entries)
 * [`aliases`](#-sudo--aliases)
 * [`include_dirs`](#-sudo--include_dirs)
+* [`include_dir_mode`](#-sudo--include_dir_mode)
 * [`package_ensure`](#-sudo--package_ensure)
 * [`content_dir`](#-sudo--content_dir)
 * [`validate`](#-sudo--validate)
@@ -137,6 +138,16 @@ Data type: `Array[Stdlib::Absolutepath]`
 an array of paths to include in the sudoers file
 
 Default value: `[]`
+
+##### <a name="-sudo--include_dir_mode"></a>`include_dir_mode`
+
+Data type: `Stdlib::Filemode`
+
+The mode of each directory declared through `sudo::include_dir` (and so
+`include_dirs`). Defaults to the distribution's mode for
+`/etc/sudoers.d`: `0750` on EL and `0755` on Ubuntu (from module data).
+
+Default value: `'0750'`
 
 ##### <a name="-sudo--package_ensure"></a>`package_ensure`
 

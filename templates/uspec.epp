@@ -23,17 +23,12 @@
     }
   ]
 
-  case $facts['os']['family'] {
-    'RedHat': {
-      $_setenv = [
-        $setenv ? {
-          true    => 'SETENV',
-          default => 'NOSETENV',
-        }
-      ]
+  $_setenv = [
+    $setenv ? {
+      true    => 'SETENV',
+      default => 'NOSETENV',
     }
-    default: { $_setenv = [] }
-  }
+  ]
 
   $t_tag_spec = $_passwd + $_exec + $_setenv
 

@@ -16,6 +16,21 @@ describe 'sudo_version' do
       expect(Facter.fact(:sudo_version).value).to eq('1.2.3')
     end
 
+    {
+      'EL 9'         => ['Sudo version 1.9.5p2', '1.9.5p2'],
+      'Ubuntu 22.04' => ['Sudo version 1.9.9', '1.9.9'],
+      'Ubuntu 24.04' => ['Sudo version 1.9.15p5', '1.9.15p5'],
+    }.each do |platform, (first_line, version)|
+      it "parses the #{platform} version string" do
+        allow(Facter::Util::Resolution).to receive(:which).with('sudo').and_return('/usr/bin/sudo')
+        allow(File).to receive(:executable?).with('/usr/bin/sudo').and_return(true)
+        allow(Facter::Core::Execution).to receive(:execute).with('/usr/bin/sudo -V').and_return(
+          "#{first_line}\nSudoers policy plugin version #{version}\n",
+        )
+        expect(Facter.fact(:sudo_version).value).to eq(version)
+      end
+    end
+
     it 'returns nil when sudo is not executable' do
       allow(Facter::Util::Resolution).to receive(:which).with('sudo').and_return('/bin/sudo')
       allow(File).to receive(:executable?).with('/bin/sudo').and_return(false)
