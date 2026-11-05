@@ -1,3 +1,7 @@
+* Thu Nov 05 2026 Steven Pritchard <steve@sicura.us> - 7.1.1
+- Fixed an OpenVox 9 (OpenFact 6) deprecation warning from the `sudo_version`
+  fact by using `Facter::Core::Execution.which` instead of `Facter::Util::Resolution.which`
+
 * Thu Oct 08 2026 Steven Pritchard <steve@sicura.us> - 7.1.0
 - Add support for OpenVox 9
 - Update metadata.json dependency ranges from the Forge
