@@ -3,7 +3,7 @@
 #  for CVE-2019-14287 is needed.
 #
 Facter.add('sudo_version') do
-  sudo_cmd = Facter::Util::Resolution.which('sudo')
+  sudo_cmd = Facter::Core::Execution.which('sudo')
   confine { sudo_cmd && File.executable?(sudo_cmd) }
   setcode do
     Facter::Core::Execution.execute("#{sudo_cmd} -V").chomp.split("\n")[0].split(%r{\s+})[-1]
