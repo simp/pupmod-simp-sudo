@@ -1,3 +1,7 @@
+* Mon Nov 23 2026 Hazel Caballero <hazel@sicura.us> - 7.1.2
+- Fixed the `sudo_version` fact raising an error on every run when `sudo -V`
+  prints nothing
+
 * Thu Nov 05 2026 Steven Pritchard <steve@sicura.us> - 7.1.1
 - Fixed an OpenVox 9 (OpenFact 6) deprecation warning from the `sudo_version`
   fact by using `Facter::Core::Execution.which` instead of `Facter::Util::Resolution.which`
